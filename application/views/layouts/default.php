@@ -11,7 +11,10 @@
 <div class="container mt-4">
 
 	<!-- Injection du menu ici -->
-	<?php $this->load->view('layouts/menu'); ?>
+	<?php if (!isset($show_menu) || $show_menu): ?>
+		<?php $this->load->view('layouts/menu'); ?>
+	<?php endif; ?>
+
 
 	<!-- Injection du contenu des vues ici -->
 	<?php if (isset($content)) {
