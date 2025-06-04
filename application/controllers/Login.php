@@ -14,11 +14,11 @@ class Login extends MY_Controller {
 		$email = $this->input->post('email');
 		$password = $this->input->post('mot_de_passe');
 		$user = $this->Utilisateur->getUserByLogins($email, $password);
-		var_dump($user);
+		//var_dump($user);
 		if ($user) {
 			$role = $this->Role->getRoleByUserIdRole($user->id_role);
 			$this->session->set_userdata('user', $user);
-			var_dump($role);
+			//var_dump($role);
 			redirect('stocks/' . $role);
 		} else {
 			$data['error'] = "Email ou mot de passe incorrect.";
