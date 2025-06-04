@@ -24,4 +24,13 @@ class Role extends CI_Model {
 		return null;
 	}
 
+	public function getIdByRoleName($roleName)
+	{
+		$query = $this->db->get_where('role', ['libelle' => $roleName]);
+		$role = $query->row();
+
+		return $role ? $role->id : null;
+	}
+
+
 }

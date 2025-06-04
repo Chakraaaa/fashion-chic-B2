@@ -4,37 +4,31 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Stocks extends MY_Controller {
 
 	public function __construct() {
-	parent::__construct();
-	$this->load->helper('url');
+		parent::__construct();
+		$this->load->helper('url');
+		$this->load->model('Role');
 	}
 
-	public function admin() {
-	$data['user'] = $this->session->userdata('user');
-	$this->loadView('stocks/admin', $data, true);
-	}
+	public function index() {
+		$user = $this->session->userdata('user');
 
-	public function gerant() {
-	$data['user'] = $this->session->userdata('user');
-	$this->loadView('stocks/gerant', $data, true);
-	}
+		if (!$user) {
+			redirect('login');
+		}
 
-	public function commercial() {
-	$data['user'] = $this->session->userdata('user');
-	$this->loadView('stocks/commercial', $data, true);
-	}
+		$role = $this->Role->getRoleByUserIdRole($user->id_role);
 
-	public function manager() {
-	$data['user'] = $this->session->userdata('user');
-	$this->loadView('stocks/manager', $data, true);
-	}
+		$data = [
+			'user' => $user,
+			'role' => $role,
+		];
 
-	public function preparateur() {
-	$data['user'] = $this->session->userdata('user');
-	$this->loadView('stocks/preparateur', $data, true);
-	}
-
-	public function envoyeur() {
-	$data['user'] = $this->session->userdata('user');
-	$this->loadView('stocks/envoyeur', $data, true);
+		$view_path = "stocks/{$role}";
+		if (file_exists(APPPATH . "views/{$view_path}.php")) {
+			$this->loadView($view_path, $data);
+		} else {
+			show_error("Vue non disponible pour le rôle : $role", 404);
+		}
 	}
 }
+

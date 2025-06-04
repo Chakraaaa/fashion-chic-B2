@@ -19,5 +19,12 @@ class Utilisateur extends CI_Model {
 		return null;
 	}
 
+	public function getUsersByIdRole($roleId)
+	{
+		$this->db->where('id_role', $roleId);
+		return $this->db->get('utilisateur')->result();
+	}
+
+
 
 }

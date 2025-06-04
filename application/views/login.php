@@ -1,3 +1,5 @@
+<?php  $chemin_absolu = FCPATH . 'assets\images\logo.png'; var_dump($chemin_absolu);?>
+
 <!-- Ajout des icônes Font Awesome -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
@@ -5,10 +7,8 @@
 	<div class="col-md-6 col-lg-4">
 		<div class="card shadow">
 			<div class="card-header bg-primary text-white text-center">
-				<h4 class="mb-0">
-					<i class="fas fa-tshirt me-2"></i>
-					Connexion
-				</h4>
+				<img src="C:\wamp64\www\fashion-chic\assets\images\logo.png" alt="Logo de l'entreprise" class="mb-2" style="max-height: 60px;">
+				<h4 class="mb-0">Connexion</h4>
 			</div>
 			<div class="card-body p-4">
 
@@ -49,7 +49,7 @@
 
 					<div class="d-grid">
 						<button type="submit" class="btn btn-primary btn-lg">
-							<i class="fas fa-sign-in-alt me-2"></i>Se connecter
+							Se connecter
 						</button>
 					</div>
 				</form>

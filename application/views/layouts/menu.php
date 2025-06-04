@@ -1,3 +1,8 @@
+<?php
+$user = $this->session->userdata('user');
+$role = isset($user) ? $user->role_nom : 'invité';
+?>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="#">FASHION-CHIC</a>
@@ -17,7 +22,7 @@
 				</li>
 
 				<li class="nav-item">
-					<a class="nav-link" href="#">Clients</a>
+					<a class="nav-link" href="<?= site_url('clients') ?>">Clients</a>
 				</li>
 
 				<li class="nav-item">
