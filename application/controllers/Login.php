@@ -17,8 +17,8 @@ class Login extends MY_Controller {
 		var_dump($user);
 		if ($user) {
 			$role = $this->Role->getRoleByUserIdRole($user->id_role);
-			var_dump($role);
 			$this->session->set_userdata('user', $user);
+			var_dump($role);
 			redirect('stocks/' . $role);
 		} else {
 			$data['error'] = "Email ou mot de passe incorrect.";

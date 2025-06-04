@@ -1,0 +1,146 @@
+/* ===== STYLES ADMIN UTILISATEURS ===== */
+
+/* Bouton d'ajout avec gradient */
+.btn-ajouter {
+	background: linear-gradient(45deg, #28a745, #20c997);
+	border: none;
+	color: white;
+	font-weight: 500;
+	padding: 10px 20px;
+	border-radius: 8px;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-ajouter:hover {
+	background: linear-gradient(45deg, #218838, #1e7e34);
+	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+	color: white;
+}
+
+/* Icônes d'actions */
+.action-icon {
+	cursor: pointer;
+	margin: 0 5px;
+	transition: all 0.3s ease;
+	padding: 5px;
+	border-radius: 4px;
+}
+
+.action-icon:hover {
+	color: #007bff;
+	background-color: rgba(0, 123, 255, 0.1);
+}
+
+.delete-icon:hover {
+	color: #dc3545 !important;
+	background-color: rgba(220, 53, 69, 0.1);
+}
+
+/* Tableau stylisé */
+.table-admin {
+	border-radius: 10px;
+	overflow: hidden;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table-admin thead th {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: white;
+	font-weight: 600;
+	border: none;
+	padding: 15px 12px;
+}
+
+.table-admin tbody tr:hover {
+	background-color: rgba(0, 123, 255, 0.05);
+	transition: background-color 0.2s ease;
+}
+
+/* Messages flash stylisés */
+.alert-custom {
+	border: none;
+	border-radius: 10px;
+	padding: 15px 20px;
+	margin-bottom: 20px;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.alert-success-custom {
+	background: linear-gradient(45deg, #28a745, #20c997);
+	color: white;
+}
+
+.alert-danger-custom {
+	background: linear-gradient(45deg, #dc3545, #c82333);
+	color: white;
+}
+
+/* Modal personnalisée */
+.modal-header-custom {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: white;
+	border-radius: 10px 10px 0 0;
+}
+
+.modal-content-custom {
+	border-radius: 15px;
+	border: none;
+	box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* Badges de rôles */
+.badge-role {
+	font-size: 0.75rem;
+	padding: 0.375rem 0.75rem;
+	border-radius: 6px;
+	font-weight: 500;
+}
+
+.badge-admin {
+	background: linear-gradient(45deg, #dc3545, #c82333);
+	color: white;
+}
+
+.badge-gestionnaire {
+	background: linear-gradient(45deg, #28a745, #20c997);
+	color: white;
+}
+
+.badge-consultant {
+	background: linear-gradient(45deg, #007bff, #0056b3);
+	color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.btn-ajouter {
+		padding: 8px 15px;
+		font-size: 0.9rem;
+	}
+
+	.action-icon {
+		margin: 0 2px;
+	}
+
+	.table-admin {
+		font-size: 0.9rem;
+	}
+}
+
+/* Animation pour les nouvelles lignes */
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.new-user-row {
+	animation: fadeInUp 0.5s ease-out;
+}
