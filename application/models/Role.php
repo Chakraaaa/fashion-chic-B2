@@ -23,6 +23,23 @@ class Role extends CI_Model {
 
 		return null;
 	}
+	// Récupérer tous les rôles
+	public function getAllRoles() {
+		$this->db->order_by('libelle', 'ASC');
+		$query = $this->db->get('role');
+		return $query->result();
+	}
+
+	// Récupérer un rôle par son ID
+	public function getRoleById($id) {
+		$this->db->where('id', $id);
+		$query = $this->db->get('role');
+
+		if ($query->num_rows() === 1) {
+			return $query->row();
+		}
+		return null;
+	}
 
 	public function getIdByRoleName($roleName)
 	{
