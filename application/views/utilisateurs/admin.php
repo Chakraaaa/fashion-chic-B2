@@ -27,8 +27,6 @@
 		}
 
 
-
-		/* Tableau stylisé */
 		.table {
 			border-radius: 10px;
 			overflow: hidden;
@@ -48,7 +46,6 @@
 			transition: background-color 0.2s ease;
 		}
 
-		/* Modal personnalisée */
 		.modal-header {
 			border-radius: 10px 10px 0 0;
 		}
@@ -84,7 +81,6 @@
 </head>
 <body class="bg-light py-4">
 
-<!-- Messages flash -->
 <?php if ($this->session->flashdata('success')): ?>
 	<div class="alert alert-success alert-dismissible fade show" role="alert">
 		<i class="bi bi-check-circle-fill me-2"></i><?= $this->session->flashdata('success') ?>

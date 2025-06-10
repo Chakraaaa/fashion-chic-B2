@@ -19,7 +19,31 @@ class Utilisateur extends CI_Model {
 
 		return null;
 	}
-// Récupérer un utilisateur par son ID
+
+	public function getAllUsersWithRole() {
+		$this->db->select('u.*, r.libelle as nom_role');
+		$this->db->from('utilisateur u');
+		$this->db->join('role r', 'u.id_role = r.id', 'left');
+		$this->db->order_by('u.nom', 'ASC');
+		$query = $this->db->get();
+
+		return $query->result();
+	}
+
+	public function getUserWithRoleById($id) {
+		$this->db->select('u.*, r.libelle as nom_role');
+		$this->db->from('utilisateur u');
+		$this->db->join('role r', 'u.id_role = r.id', 'left');
+		$this->db->where('u.id_utilisateur', $id);
+		$query = $this->db->get();
+
+		if ($query->num_rows() === 1) {
+			return $query->row();
+		}
+		return null;
+	}
+
+	// Récupérer un utilisateur par son ID
 	public function getUserById($id) {
 		$this->db->where('id_utilisateur', $id);
 		$query = $this->db->get('utilisateur');
@@ -36,7 +60,7 @@ class Utilisateur extends CI_Model {
 		return $query->result();
 	}
 
-// Créer un nouvel utilisateur
+	// Créer un nouvel utilisateur
 	public function createUser($userData) {
 		if ($this->db->insert('utilisateur', $userData)) {
 			return $this->db->insert_id();
@@ -44,19 +68,19 @@ class Utilisateur extends CI_Model {
 		return false;
 	}
 
-// Modifier un utilisateur
+	// Modifier un utilisateur
 	public function updateUser($id, $userData) {
 		$this->db->where('id_utilisateur', $id);
 		return $this->db->update('utilisateur', $userData);
 	}
 
-// Supprimer un utilisateur
+	// Supprimer un utilisateur
 	public function deleteUser($id) {
 		$this->db->where('id_utilisateur', $id);
 		return $this->db->delete('utilisateur');
 	}
 
-// Vérifier si un email existe déjà (pour éviter les doublons)
+	// Vérifier si un email existe déjà (pour éviter les doublons)
 	public function emailExists($email, $excludeId = null) {
 		$this->db->where('email', $email);
 		if ($excludeId) {

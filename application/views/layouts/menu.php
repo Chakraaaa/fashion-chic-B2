@@ -1,3 +1,9 @@
+<?php
+if (!isset($user) || in_array($user->id_role, [5, 6])) {
+	return;
+}
+?>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="#">FASHION-CHIC</a>
@@ -8,27 +14,35 @@
 		<div class="collapse navbar-collapse" id="mainNavbar">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-				<li class="nav-item">
-					<a class="nav-link" href="#">Stocks</a>
-				</li>
+				<?php if (in_array($user->id_role, [1, 2, 3, 4])): ?>
+					<li class="nav-item">
+						<a class="nav-link" href="<?=site_url('stocks');?>">Stocks</a>
+					</li>
+				<?php endif; ?>
 
-				<li class="nav-item">
-					<a class="nav-link" href="#">Commandes</a>
-				</li>
+				<?php if (in_array($user->id_role, [1, 2, 3, 4])): ?>
+					<li class="nav-item">
+						<a class="nav-link" href="<?=site_url('commandes')?>">Commandes</a>
+					</li>
+				<?php endif; ?>
 
-				<li class="nav-item">
-					<a class="nav-link" href="#">Clients</a>
-				</li>
+				<?php if (in_array($user->id_role, [1, 2, 3])): ?>
+					<li class="nav-item">
+						<a class="nav-link" href="<?=site_url('clients')?>">Clients</a>
+					</li>
+				<?php endif; ?>
 
-				<li class="nav-item">
-					<a class="nav-link" href="#">Utilisateurs</a>
-				</li>
+				<?php if (in_array($user->id_role, [1, 2])): ?>
+					<li class="nav-item">
+						<a class="nav-link" href="<?=site_url('utilisateur')?>">Utilisateurs</a>
+					</li>
+				<?php endif; ?>
 
 			</ul>
 
 			<ul class="navbar-nav ms-auto">
 				<li class="nav-item">
-					<a class="nav-link" href="#">Déconnexion</a>
+					<a class="nav-link" href="<?=site_url('login/logout')?>">Déconnexion</a>
 				</li>
 			</ul>
 		</div>
