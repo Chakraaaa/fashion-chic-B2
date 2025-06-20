@@ -23,14 +23,27 @@ CREATE TABLE CLIENT (
 						FOREIGN KEY (id_commercial) REFERENCES UTILISATEUR(id_utilisateur)
 );
 
-CREATE TABLE PRODUIT (
+CREATE TABLE produit (
 						 id_produit INT AUTO_INCREMENT PRIMARY KEY,
+						 reference VARCHAR(100) NOT NULL UNIQUE,        -- SKU ou code article
 						 nom VARCHAR(255) NOT NULL,
-						 categorie VARCHAR(255),
-						 taille VARCHAR(50),
+						 description TEXT,
+						 categorie VARCHAR(100),                        -- Ex: T-Shirt, Jean...
+						 genre ENUM('Homme', 'Femme', 'Enfant', 'Mixte'),
+						 taille VARCHAR(20),
 						 couleur VARCHAR(50),
-						 marque VARCHAR(100)
+						 saison VARCHAR(20),                            -
+						 marque VARCHAR(100),
+						 prix_achat DECIMAL(10,2),
+						 prix_vente DECIMAL(10,2),
+						 quantite INT DEFAULT 0,
+						 seuil_reappro INT DEFAULT 0,
+						 ean VARCHAR(50),                               -- Code barre si dispo
+						 actif BOOLEAN DEFAULT TRUE,
+						 date_ajout DATETIME DEFAULT CURRENT_TIMESTAMP,
+						 date_modif DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
 
 CREATE TABLE LOT (
 					 id_lot INT AUTO_INCREMENT PRIMARY KEY,

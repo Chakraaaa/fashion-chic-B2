@@ -78,9 +78,8 @@ class Utilisateur extends CI_Model {
 		return $this->db->update('utilisateur', $userData);
 	}
 
-	// Supprimer un utilisateur
 	public function deleteUser($id) {
-		$this->db->where('id_utilisateur', $id);
+		$this->db->where('id', $id);
 		return $this->db->delete('utilisateur');
 	}
 
@@ -93,6 +92,14 @@ class Utilisateur extends CI_Model {
 		$query = $this->db->get('utilisateur');
 		return $query->num_rows() > 0;
 	}
+
+	public function addUser($data)
+	{
+		return $this->db->insert('utilisateur', $data);
+	}
+
+
+
 
 
 

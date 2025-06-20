@@ -617,9 +617,9 @@ class CI_Input {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Fetch Utilisateur Agent string
+	 * Fetch Utilisateurs Agent string
 	 *
-	 * @return	string|null	Utilisateur Agent string or NULL if it doesn't exist
+	 * @return	string|null	Utilisateurs Agent string or NULL if it doesn't exist
 	 */
 	public function user_agent($xss_clean = NULL)
 	{

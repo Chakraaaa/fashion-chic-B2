@@ -20,6 +20,12 @@ if (!isset($user) || in_array($user->id_role, [5, 6])) {
 					</li>
 				<?php endif; ?>
 
+				<?php if (in_array($user->id_role, [1, 2, 3])): ?>
+					<li class="nav-item">
+						<a class="nav-link" href="<?=site_url('lots');?>">Lots</a>
+					</li>
+				<?php endif; ?>
+
 				<?php if (in_array($user->id_role, [1, 2, 3, 4])): ?>
 					<li class="nav-item">
 						<a class="nav-link" href="<?=site_url('commandes')?>">Commandes</a>
@@ -34,7 +40,7 @@ if (!isset($user) || in_array($user->id_role, [5, 6])) {
 
 				<?php if (in_array($user->id_role, [1, 2])): ?>
 					<li class="nav-item">
-						<a class="nav-link" href="<?=site_url('utilisateur')?>">Utilisateurs</a>
+						<a class="nav-link" href="<?=site_url('utilisateurs')?>">Utilisateurs</a>
 					</li>
 				<?php endif; ?>
 

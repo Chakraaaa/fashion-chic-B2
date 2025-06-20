@@ -39,7 +39,7 @@ class Clients extends MY_Controller {
 	public function load_add_client_popup()
 	{
 		$this->load->model('Role');
-		$this->load->model('Utilisateur');
+		$this->load->model('Utilisateurs');
 
 		$idRoleCommercial = $this->Role->getIdByRoleName('commercial');
 

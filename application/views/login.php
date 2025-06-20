@@ -1,5 +1,3 @@
-<?php  $chemin_absolu = FCPATH . 'assets\images\logo.png'; var_dump($chemin_absolu);?>
-
 <!-- Ajout des icônes Font Awesome -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 

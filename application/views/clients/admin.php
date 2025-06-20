@@ -14,6 +14,7 @@
 			<th>Téléphone</th>
 			<th>Email</th>
 			<th>Commercial</th>
+			<th>Actions</th>
 		</tr>
 		</thead>
 		<tbody>
