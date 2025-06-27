@@ -89,8 +89,6 @@ class Lots extends MY_Controller {
 
 	public function load_contenu_lot($id_lot)
 	{
-		var_dump($id_lot);
-
 		$this->load->model('Lot');
 		$this->load->model('Produit');
 

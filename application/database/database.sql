@@ -48,7 +48,6 @@ CREATE TABLE produit (
 CREATE TABLE LOT (
 					 id_lot INT AUTO_INCREMENT PRIMARY KEY,
 					 date_creation DATE NOT NULL,
-					 statut VARCHAR(100)
 );
 
 CREATE TABLE CONTENU_LOT (
@@ -62,15 +61,26 @@ CREATE TABLE CONTENU_LOT (
 
 CREATE TABLE COMMANDE (
 						  id_commande INT AUTO_INCREMENT PRIMARY KEY,
+						  numero_commande VARCHAR(50) NOT NULL UNIQUE,
 						  id_client INT NOT NULL,
 						  id_commercial INT,
-						  id_lot INT,
 						  date_commande DATE NOT NULL,
+						  cout_total DECIMAL(10,2) NOT NULL DEFAULT 0.00,
 						  statut VARCHAR(100),
 						  FOREIGN KEY (id_client) REFERENCES CLIENT(id_client),
-						  FOREIGN KEY (id_commercial) REFERENCES UTILISATEUR(id_utilisateur),
-						  FOREIGN KEY (id_lot) REFERENCES LOT(id_lot)
+						  FOREIGN KEY (id_commercial) REFERENCES UTILISATEUR(id_utilisateur)
 );
+
+CREATE TABLE COMMANDE_LOT (
+							  id_commande INT NOT NULL,
+							  id_lot INT NOT NULL,
+							  quantite INT NOT NULL DEFAULT 1,
+							  PRIMARY KEY (id_commande, id_lot),
+							  FOREIGN KEY (id_commande) REFERENCES COMMANDE(id_commande) ON DELETE CASCADE,
+							  FOREIGN KEY (id_lot) REFERENCES LOT(id_lot)
+);
+
+
 
 CREATE TABLE PREPARATION (
 							 id_preparation INT AUTO_INCREMENT PRIMARY KEY,
