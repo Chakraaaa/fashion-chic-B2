@@ -18,6 +18,21 @@ class Utilisateur extends CI_Model {
 
 		return null;
 	}
+
+	public function getUserByIdentifiant($identifiant) {
+		// Récupérer tous les utilisateurs avec identifiant
+		$this->db->where('identifiant IS NOT NULL');
+		$query = $this->db->get('utilisateur');
+		$utilisateurs = $query->result();
+		
+		// Vérifier si l'identifiant correspond en utilisant password_verify
+		foreach ($utilisateurs as $utilisateur) {
+			if ($identifiant === $utilisateur->identifiant) {
+				return $utilisateur;
+			}
+		}
+		return null;
+	}
 	public function getUsersByIdRole($roleId)
 	{
 		$this->db->where('id_role', $roleId);
@@ -27,7 +42,7 @@ class Utilisateur extends CI_Model {
 	public function getAllUsersWithRole() {
 		$this->db->select('u.*, r.libelle as nom_role');
 		$this->db->from('utilisateur u');
-		$this->db->join('role r', 'u.id_role = r.id', 'left');
+		$this->db->join('role r', 'u.id_role = r.id_role', 'left');
 		$this->db->order_by('u.nom', 'ASC');
 		$query = $this->db->get();
 
@@ -79,7 +94,7 @@ class Utilisateur extends CI_Model {
 	}
 
 	public function deleteUser($id) {
-		$this->db->where('id', $id);
+		$this->db->where('id_utilisateur', $id);
 		return $this->db->delete('utilisateur');
 	}
 
@@ -93,15 +108,51 @@ class Utilisateur extends CI_Model {
 		return $query->num_rows() > 0;
 	}
 
+	// Vérifier si un identifiant existe déjà (pour éviter les doublons)
+	public function identifiantExists($identifiant, $excludeId = null) {
+		// Récupérer tous les utilisateurs avec identifiant
+		$this->db->select('identifiant');
+		if ($excludeId) {
+			$this->db->where('id_utilisateur !=', $excludeId);
+		}
+		$query = $this->db->get('utilisateur');
+		$utilisateurs = $query->result();
+		
+		// Vérifier si l'identifiant existe en comparant avec password_verify
+		foreach ($utilisateurs as $utilisateur) {
+			if (!empty($utilisateur->identifiant) && is_string($utilisateur->identifiant)) {
+				if ($identifiant === $utilisateur->identifiant) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	public function addUser($data)
 	{
 		return $this->db->insert('utilisateur', $data);
 	}
 
 
+	// Retourne tous les utilisateurs ayant le rôle commercial
+	public function getCommerciaux() {
+		$this->db->select('u.*');
+		$this->db->from('utilisateur u');
+		$this->db->join('role r', 'u.id_role = r.id_role');
+		$this->db->where('LOWER(r.libelle)', 'commercial');
+		return $this->db->get()->result();
+	}
 
-
-
+	// Récupérer un utilisateur par son email (pour vérification du mot de passe haché)
+	public function getUserByEmail($email) {
+		$this->db->where('email', $email);
+		$query = $this->db->get('utilisateur');
+		if ($query->num_rows() === 1) {
+			return $query->row();
+		}
+		return null;
+	}
 
 
 }

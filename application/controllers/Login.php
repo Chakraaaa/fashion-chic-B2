@@ -8,20 +8,41 @@ class Login extends MY_Controller {
 		$this->loadView('login', $data, false);
 	}
 
+	public function identifiant() {
+		$data['title'] = 'Connexion par identifiant - FASHION CHIC';
+		$this->loadView('login_identifiant', $data, false);
+	}
+
 	public function authentifier() {
 		$this->load->model('Utilisateur');
 		$this->load->model('Role');
 		$email = $this->input->post('email');
 		$password = $this->input->post('mot_de_passe');
-		$user = $this->Utilisateur->getUserByLogins($email, $password);
-		if ($user) {
+		$user = $this->Utilisateur->getUserByEmail($email);
+		if ($user && password_verify($password, $user->mot_de_passe)) {
 			$role = $this->Role->getRoleByUserIdRole($user->id_role);
 			$user->role_nom = strtolower($role->libelle);
 			$this->session->set_userdata('user', $user);
 			redirect('stocks');
 		} else {
 			$data['error'] = "Email ou mot de passe incorrect.";
-			$this->loadView('login/index', $data, false);
+			$this->loadView('login', $data, false);
+		}
+	}
+
+	public function authentifier_identifiant() {
+		$this->load->model('Utilisateur');
+		$this->load->model('Role');
+		$identifiant = $this->input->post('identifiant');
+		$user = $this->Utilisateur->getUserByIdentifiant($identifiant);
+		if ($user) {
+			$role = $this->Role->getRoleByUserIdRole($user->id_role);
+			$user->role_nom = strtolower($role->libelle);
+			$this->session->set_userdata('user', $user);
+			redirect('stocks');
+		} else {
+			$data['error'] = "Identifiant incorrect.";
+			$this->loadView('login_identifiant', $data, false);
 		}
 	}
 

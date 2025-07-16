@@ -57,6 +57,18 @@
         transform: scale(1.08);
         box-shadow: 0 4px 16px rgba(231, 76, 60, 0.18);
     }
+    .btn-secondary {
+        border-radius: 8px;
+        font-weight: 500;
+        margin-left: 4px;
+        transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+    }
+    .btn-secondary:hover {
+        background: #e9edfa;
+        color: #2d3651;
+        transform: scale(1.08);
+        box-shadow: 0 4px 16px rgba(44, 62, 80, 0.10);
+    }
     .table {
         border-radius: 14px;
         overflow: hidden;
@@ -108,41 +120,58 @@
 
 <div class="container mt-4">
     <div class="main-card">
-        <h1 class="h4 fw-semibold mb-4">Mes clients</h1>
-        <a href="<?= site_url('clients/load_add_client_popup') ?>" class="btn btn-primary mb-3 btn-ajouter-client" data-bs-toggle="modal" data-bs-target="#modalAjouterClient">
-            <i class="bi bi-plus-circle"></i> Nouveau client
+        <h1 class="h4 fw-semibold mb-4">Mes commandes</h1>
+        <a href="<?= site_url('commandes/load_add_commande_popup') ?>" class="btn btn-primary mb-3 btn-ajouter-commande" data-bs-toggle="modal" data-bs-target="#modalAjouterCommande">
+            <i class="bi bi-plus-circle"></i> Nouvelle commande
         </a>
         <table class="table table-striped table-hover">
             <thead class="table-light">
             <tr>
-                <th>Nom</th>
-                <th>Adresse</th>
-                <th>Téléphone</th>
-                <th>Email</th>
+                <th>Numéro</th>
+                <th>Client</th>
+                <th>Date</th>
+                <th>Statut</th>
+                <th>Priorité</th>
+                <th>Commentaire</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-            <?php if (empty($clients)): ?>
+            <?php if (empty($commandes)): ?>
                 <tr>
-                    <td colspan="5" class="text-center text-muted py-4">
-                        Aucun client trouvé
+                    <td colspan="7" class="text-center text-muted py-4">
+                        Aucune commande trouvée
                     </td>
                 </tr>
             <?php else: ?>
-                <?php foreach ($clients as $client): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($client->nom) ?></td>
-                        <td><?= htmlspecialchars($client->adresse) ?></td>
-                        <td><?= htmlspecialchars($client->telephone) ?></td>
-                        <td><?= htmlspecialchars($client->email) ?></td>
+                <?php foreach ($commandes as $commande): ?>
+                    <?php
+                    $priority = (int) $commande->priority_level;
+                    if ($priority >= 8) {
+                        $bg = 'style="background-color:#ffcccc"';
+                    } elseif ($priority >= 5) {
+                        $bg = 'style="background-color:#ffe5b4"';
+                    } elseif ($priority >= 2) {
+                        $bg = 'style="background-color:#e6f0ff"';
+                    } else {
+                        $bg = '';
+                    }
+                    ?>
+                    <tr <?= $bg ?>>
+                        <td><?= htmlspecialchars($commande->numero_commande) ?></td>
+                        <td><?= htmlspecialchars($commande->nom_client) ?></td>
+                        <td><?= date('d/m/Y', strtotime($commande->date_commande)) ?></td>
+                        <td><?= htmlspecialchars($commande->statut) ?></td>
+                        <td class="fw-bold text-center"> <?= $commande->priority_level ?> </td>
+                        <td><?= htmlspecialchars($commande->commentaire) ?></td>
                         <td>
-                            <button class="btn btn-info btn-sm btn-edit-client" data-id="<?= $client->id_client ?>">
+                            <button class="btn btn-info btn-sm btn-edit-commande" data-id="<?= $commande->id_commande ?>">
                                 <i class="bi bi-pencil-square"></i>
                             </button>
-                            <button class="btn btn-danger btn-sm btn-delete-client" data-id="<?= $client->id_client ?>">
+                            <button class="btn btn-danger btn-sm btn-delete-commande" data-id="<?= $commande->id_commande ?>">
                                 <i class="bi bi-trash-fill"></i>
                             </button>
+                            <a href="<?= site_url('commandes/voir_lots/' . $commande->id_commande) ?>" class="btn btn-secondary btn-sm">Lots</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -152,25 +181,25 @@
     </div>
 </div>
 
-<div id="popup-add-client" style="display: none;"></div>
-<div id="popup-edit-client" style="display: none;"></div>
+<div id="popup-add-commande" style="display: none;"></div>
+<div id="popup-edit-commande" style="display: none;"></div>
 
 <script>
 $(document).ready(function () {
-    $('.btn-ajouter-client').on('click', function (e) {
+    $('.btn-ajouter-commande').on('click', function (e) {
         e.preventDefault();
         $.ajax({
             url: $(this).attr('href'),
             method: 'GET',
             success: function (data) {
-                $('#popup-add-client').remove();
+                $('#popup-add-commande').remove();
                 $('body').append(data);
-                const popup = new bootstrap.Modal(document.getElementById('modalAjouterClient'), {
+                const popup = new bootstrap.Modal(document.getElementById('modalAjouterCommande'), {
                     backdrop: 'static',
                     keyboard: false
                 });
                 popup.show();
-                $('#popup-add-client').on('hidden.bs.modal', function () {
+                $('#popup-add-commande').on('hidden.bs.modal', function () {
                     $(this).remove();
                 });
             },
@@ -180,20 +209,20 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on('click', '.btn-edit-client', function () {
-        const clientId = $(this).data('id');
+    $(document).on('click', '.btn-edit-commande', function () {
+        const commandeId = $(this).data('id');
         $.ajax({
-            url: siteUrl + '/clients/load_edit_client_popup/' + clientId,
+            url: siteUrl + '/commandes/load_edit_commande_popup/' + commandeId,
             method: 'GET',
             success: function (data) {
-                $('#popup-edit-client').remove();
+                $('#popup-edit-commande').remove();
                 $('body').append(data);
-                const popup = new bootstrap.Modal(document.getElementById('modalEditClient'), {
+                const popup = new bootstrap.Modal(document.getElementById('modalEditCommande'), {
                     backdrop: 'static',
                     keyboard: false
                 });
                 popup.show();
-                $('#popup-edit-client').on('hidden.bs.modal', function () {
+                $('#popup-edit-commande').on('hidden.bs.modal', function () {
                     $(this).remove();
                 });
             },
@@ -203,11 +232,11 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on('click', '.btn-delete-client', function () {
-        const clientId = $(this).data('id');
-        if (confirm("Voulez-vous vraiment supprimer ce client ?")) {
+    $(document).on('click', '.btn-delete-commande', function () {
+        const commandeId = $(this).data('id');
+        if (confirm("Voulez-vous vraiment supprimer cette commande ?")) {
             $.ajax({
-                url: siteUrl + '/clients/delete/' + clientId,
+                url: siteUrl + '/commandes/delete/' + commandeId,
                 type: 'POST',
                 success: function () {
                     location.reload();

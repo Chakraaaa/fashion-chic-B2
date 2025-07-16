@@ -10,6 +10,7 @@ class Lots extends MY_Controller {
 
 	public function index() {
 		$this->load->model('Lot');
+		$this->load->model('Role');
 		$user = $this->session->userdata('user');
 		$lots = $this->Lot->getAllLots();
 
@@ -64,7 +65,13 @@ class Lots extends MY_Controller {
 			}
 		}
 
+		$nom_lot = $this->input->post('nom_lot');
+		if (empty($nom_lot)) {
+			show_error("Le nom du lot est obligatoire.", 400);
+		}
+
 		$lotData = [
+			'nom' => $nom_lot,
 			'date_creation' => date('Y-m-d'),
 		];
 		$idLot = $this->Lot->addLot($lotData);
@@ -93,6 +100,7 @@ class Lots extends MY_Controller {
 		$this->load->model('Produit');
 
 		$contenu = $this->Lot->getContenuLot($id_lot);
+		$lot = $this->Lot->getLotById($id_lot);
 
 		if (!$contenu) {
 			show_error("Aucun contenu trouvé pour ce lot.", 404);
@@ -100,6 +108,7 @@ class Lots extends MY_Controller {
 
 		$data = [
 			'id_lot' => $id_lot,
+			'nom_lot' => $lot->nom,
 			'contenu' => $contenu
 		];
 

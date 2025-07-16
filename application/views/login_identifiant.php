@@ -78,7 +78,7 @@
 	<div class="col-md-6 col-lg-4">
 		<div class="card shadow">
 			<div class="card-header text-white text-center">
-				<img src="<?= base_url('assets/images/logo.png') ?>" alt="Logo de l'entreprise" style="max-height: 110px; display: block; margin-left: auto; margin-right: auto;">
+			<img src="<?= base_url('assets/images/logo.png') ?>" alt="Logo de l'entreprise" style="max-height: 110px; display: block; margin-left: auto; margin-right: auto;">
 			</div>
 			<div class="card-body p-4">
 
@@ -96,7 +96,7 @@
 					</div>
 				<?php endif; ?>
 
-				<form method="POST" action="<?= site_url('login/authentifier') ?>">
+				<form method="POST" action="<?= site_url('login/authentifier_identifiant') ?>">
 					<?php if ($this->security->get_csrf_token_name()): ?>
 						<input type="hidden"
 							   name="<?= $this->security->get_csrf_token_name() ?>"
@@ -104,17 +104,10 @@
 					<?php endif; ?>
 
 					<div class="mb-3">
-						<label for="email" class="form-label">
-							<i class="fas fa-envelope me-2"></i>Adresse email
+						<label for="identifiant" class="form-label">
+							<i class="fas fa-user me-2"></i>Identifiant unique
 						</label>
-						<input type="email" class="form-control" id="email" name="email" placeholder="Votre email" required>
-					</div>
-
-					<div class="mb-3">
-						<label for="mot_de_passe" class="form-label">
-							<i class="fas fa-lock me-2"></i>Mot de passe
-						</label>
-						<input type="password" class="form-control" id="mot_de_passe" name="mot_de_passe" placeholder="Votre mot de passe" required>
+						<input type="text" class="form-control" id="identifiant" name="identifiant" placeholder="Votre identifiant unique" required>
 					</div>
 
 					<div class="d-grid">
@@ -126,7 +119,7 @@
 
 				<div class="text-center mt-3">
 					<small class="text-muted">
-						<a href="<?= site_url('login/identifiant') ?>" class="text-decoration-none">Se connecter avec mon identifiant</a>
+						<a href="<?= site_url('login') ?>" class="text-decoration-none">Se connecter avec mon email</a>
 					</small>
 				</div>
 
@@ -135,4 +128,4 @@
 	</div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> 

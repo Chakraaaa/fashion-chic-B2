@@ -10,6 +10,8 @@ CREATE TABLE UTILISATEUR (
 							 email VARCHAR(255) NOT NULL UNIQUE,
 							 mot_de_passe VARCHAR(255) NOT NULL,
 							 id_role INT NOT NULL,
+							 identifiant VARCHAR(100) UNIQUE,
+							 actif BOOLEAN TINYINT(1) DEFAULT 1,
 							 FOREIGN KEY (id_role) REFERENCES ROLE(id_role)
 );
 
@@ -32,7 +34,7 @@ CREATE TABLE produit (
 						 genre ENUM('Homme', 'Femme', 'Enfant', 'Mixte'),
 						 taille VARCHAR(20),
 						 couleur VARCHAR(50),
-						 saison VARCHAR(20),                            -
+						 saison VARCHAR(20),
 						 marque VARCHAR(100),
 						 prix_achat DECIMAL(10,2),
 						 prix_vente DECIMAL(10,2),
@@ -47,7 +49,8 @@ CREATE TABLE produit (
 
 CREATE TABLE LOT (
 					 id_lot INT AUTO_INCREMENT PRIMARY KEY,
-					 date_creation DATE NOT NULL,
+					 nom VARCHAR(255) NOT NULL,
+					 date_creation DATE NOT NULL
 );
 
 CREATE TABLE CONTENU_LOT (
@@ -66,9 +69,16 @@ CREATE TABLE COMMANDE (
 						  id_commercial INT,
 						  date_commande DATE NOT NULL,
 						  cout_total DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-						  statut VARCHAR(100),
+						  statut VARCHAR(100), -- Possible: 'en attente', 'en préparation', 'prête à envoyer', 'prête à livrer', 'erreur'
+						  lien_suivi VARCHAR(255),
+						  commentaire TEXT,
+						  id_preparateur INT,
+						  id_envoyeur INT,
+						  priority_level INT DEFAULT 1, -- 1 (basse priorité) à 10 (priorité max)
 						  FOREIGN KEY (id_client) REFERENCES CLIENT(id_client),
-						  FOREIGN KEY (id_commercial) REFERENCES UTILISATEUR(id_utilisateur)
+						  FOREIGN KEY (id_commercial) REFERENCES UTILISATEUR(id_utilisateur),
+						  FOREIGN KEY (id_preparateur) REFERENCES UTILISATEUR(id_utilisateur),
+						  FOREIGN KEY (id_envoyeur) REFERENCES UTILISATEUR(id_utilisateur)
 );
 
 CREATE TABLE COMMANDE_LOT (
@@ -90,4 +100,29 @@ CREATE TABLE PREPARATION (
 							 statut VARCHAR(100),
 							 FOREIGN KEY (id_commande) REFERENCES COMMANDE(id_commande),
 							 FOREIGN KEY (id_preparateur) REFERENCES UTILISATEUR(id_utilisateur)
+);
+
+CREATE TABLE log_preparateur (
+	id_log INT AUTO_INCREMENT PRIMARY KEY,
+	id_preparateur INT NOT NULL,
+	id_commande INT NOT NULL,
+	action VARCHAR(50) NOT NULL, -- ex: "statut_modifié"
+	ancien_statut VARCHAR(50),
+	nouveau_statut VARCHAR(50),
+	date_action DATETIME DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (id_preparateur) REFERENCES utilisateur(id_utilisateur),
+	FOREIGN KEY (id_commande) REFERENCES commande(id_commande)
+);
+
+CREATE TABLE log_envoyeur (
+	id_log INT AUTO_INCREMENT PRIMARY KEY,
+	id_envoyeur INT NOT NULL,
+	id_commande INT NOT NULL,
+	action VARCHAR(50) NOT NULL, -- "statut_modifié"
+	ancien_statut VARCHAR(50),
+	nouveau_statut VARCHAR(50),
+	date_action DATETIME DEFAULT CURRENT_TIMESTAMP,
+	lien_suivi VARCHAR(255),
+	FOREIGN KEY (id_envoyeur) REFERENCES utilisateur(id_utilisateur),
+	FOREIGN KEY (id_commande) REFERENCES commande(id_commande)
 );

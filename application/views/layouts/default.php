@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<div class="container mt-4">
+<div>
 
 	<!-- Injection du menu ici -->
 	<?php if (!isset($show_menu) || $show_menu): ?>

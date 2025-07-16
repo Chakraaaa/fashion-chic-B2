@@ -9,7 +9,7 @@ class Lot extends CI_Model {
 	}
 
 	public function getAllLots() {
-		$this->db->select('id, date_creation');
+		$this->db->select('id_lot, nom, date_creation');
 		$this->db->from('LOT');
 		$this->db->order_by('date_creation', 'DESC');
 
@@ -66,5 +66,34 @@ class Lot extends CI_Model {
 		}
 
 		return $idLot;
+	}
+
+	public function getLotById($id_lot)
+	{
+		$this->db->select('id_lot, nom, date_creation');
+		$this->db->from('LOT');
+		$this->db->where('id_lot', $id_lot);
+		
+		$query = $this->db->get();
+		return $query->row();
+	}
+
+	public function deleteLotById($id_lot)
+	{
+		// Démarrer une transaction
+		$this->db->trans_start();
+
+		// Supprimer le contenu du lot
+		$this->db->where('id_lot', $id_lot);
+		$this->db->delete('CONTENU_LOT');
+
+		// Supprimer le lot
+		$this->db->where('id_lot', $id_lot);
+		$this->db->delete('LOT');
+
+		// Terminer la transaction
+		$this->db->trans_complete();
+
+		return $this->db->trans_status();
 	}
 }

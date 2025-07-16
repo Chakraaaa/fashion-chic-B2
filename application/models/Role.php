@@ -14,7 +14,7 @@ class Role extends CI_Model {
 
 	public function getRoleByUserIdRole($roleId) {
 		$this->db->select('libelle');
-		$this->db->where('id', $roleId);
+		$this->db->where('id_role', $roleId);
 		$query = $this->db->get('role');
 
 		if ($query->num_rows() === 1) {
@@ -32,7 +32,7 @@ class Role extends CI_Model {
 
 	// Récupérer un rôle par son ID
 	public function getRoleById($id) {
-		$this->db->where('id', $id);
+		$this->db->where('id_role', $id);
 		$query = $this->db->get('role');
 
 		if ($query->num_rows() === 1) {
@@ -46,7 +46,7 @@ class Role extends CI_Model {
 		$query = $this->db->get_where('role', ['libelle' => $roleName]);
 		$role = $query->row();
 
-		return $role ? $role->id : null;
+		return $role ? $role->id_role : null;
 	}
 
 

@@ -2,7 +2,6 @@ INSERT INTO ROLE (libelle) VALUES
 ('admin'),
 ('gerant'),
 ('commercial'),
-('manager'),
 ('preparateur'),
 ('envoyeur');
 

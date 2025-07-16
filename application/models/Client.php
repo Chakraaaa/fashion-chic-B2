@@ -11,7 +11,7 @@ class Client extends CI_Model {
 	{
 		$this->db->select('client.*, utilisateur.nom as nom_commercial, utilisateur.prenom as prenom_commercial');
 		$this->db->from('client');
-		$this->db->join('utilisateur', 'client.id_commercial = utilisateur.id', 'left');
+		$this->db->join('utilisateur', 'client.id_commercial = utilisateur.id_utilisateur', 'left');
 		return $this->db->get()->result();
 	}
 
@@ -26,7 +26,14 @@ class Client extends CI_Model {
 		$this->db->delete('client');
 	}
 
-
+	public function getClientsByCommercialId($idCommercial)
+	{
+		$this->db->select('client.*, utilisateur.nom as nom_commercial, utilisateur.prenom as prenom_commercial');
+		$this->db->from('client');
+		$this->db->join('utilisateur', 'client.id_commercial = utilisateur.id_utilisateur', 'left');
+		$this->db->where('client.id_commercial', $idCommercial);
+		return $this->db->get()->result();
+	}
 
 
 }

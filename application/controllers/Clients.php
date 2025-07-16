@@ -28,7 +28,8 @@ class Clients extends MY_Controller {
 			$data['clients'] = $clients;
 			$this->loadView('clients/admin', $data);
 		} elseif ($role == 'commercial') {
-			// Faire une méthode getClientsByCommercialId dans le model Client et l'appelé ici
+			$clients = $this->Client->getClientsByCommercialId($user->id_utilisateur);
+			$data['clients'] = $clients;
 			$this->loadView('clients/commercial', $data);
 		}
 		else {
@@ -38,8 +39,10 @@ class Clients extends MY_Controller {
 
 	public function load_add_client_popup()
 	{
+		$user = $this->session->userdata('user');
+		$role = $this->Role->getRoleByUserIdRole($user->id_role);
 		$this->load->model('Role');
-		$this->load->model('Utilisateurs');
+		$this->load->model('Utilisateur');
 
 		$idRoleCommercial = $this->Role->getIdByRoleName('commercial');
 
@@ -47,7 +50,7 @@ class Clients extends MY_Controller {
 			show_error("Rôle 'commercial' introuvable en base", 500);
 		}
 
-		$commerciaux = $this->Utilisateur->getUsersByIdRole($idRoleCommercial);
+		$commerciaux = ($role === 'commercial') ? [] : $this->Utilisateur->getUsersByIdRole($idRoleCommercial);
 
 		$data = [
 			'commerciaux' => $commerciaux
@@ -60,13 +63,15 @@ class Clients extends MY_Controller {
 	public function saveNewClient()
 	{
 		$this->load->model('Client');
+		$user = $this->session->userdata('user');
+		$role = $this->Role->getRoleByUserIdRole($user->id_role);
 
 		$data = [
 			'nom'        => $this->input->post('nom'),
 			'adresse'    => $this->input->post('adresse'),
 			'telephone'  => $this->input->post('telephone'),
 			'email'      => $this->input->post('email'),
-			'id_commercial' => $this->input->post('id_commercial'),
+			'id_commercial' => ($role === 'commercial') ? $user->id_utilisateur : $this->input->post('id_commercial'),
 		];
 
 		$this->Client->addClient($data);
@@ -77,6 +82,12 @@ class Clients extends MY_Controller {
 	public function delete($id)
 	{
 		$this->load->model('Client');
+		$user = $this->session->userdata('user');
+		$role = $this->Role->getRoleByUserIdRole($user->id_role);
+		$client = $this->Client->getClientById($id);
+		if ($role === 'commercial' && $client->id_commercial != $user->id_utilisateur) {
+			show_error("Accès interdit à ce client.", 403);
+		}
 		$this->Client->deleteClientById($id);
 	}
 

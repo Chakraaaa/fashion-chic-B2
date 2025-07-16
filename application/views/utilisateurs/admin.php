@@ -87,9 +87,14 @@
 <div class="container mt-4">
 	<div class="d-flex justify-content-between align-items-center mb-4">
 		<h1 class="h4 fw-semibold">Liste des utilisateurs </h1>
-		<button class="btn btn-ajouter btn-ajouter-user" data-bs-toggle="modal" data-bs-target="#modalAjouterUtilisateur">
-			<i class="bi bi-person-plus-fill"></i> Ajouter un utilisateur
-		</button>
+		<div class="d-flex gap-2">
+			<button class="btn btn-ajouter btn-ajouter-user" data-bs-toggle="modal" data-bs-target="#modalAjouterUtilisateur">
+				<i class="bi bi-person-plus-fill"></i> Ajouter un utilisateur
+			</button>
+			<button class="btn btn-ajouter btn-ajouter-user-identifiant" data-bs-toggle="modal" data-bs-target="#modalAjouterUtilisateurIdentifiant">
+				<i class="bi bi-person-badge-plus"></i> Ajouter un utilisateur avec identifiant
+			</button>
+		</div>
 	</div>
 
 	<table class="table table-bordered bg-white rounded shadow-sm">
@@ -97,7 +102,7 @@
 		<tr>
 			<th>Prénom</th>
 			<th>Nom</th>
-			<th>Email</th>
+			<th>Email / Identifiant</th>
 			<th>Rôle</th>
 			<th>Date de création</th>
 			<th>Actions</th>
@@ -116,19 +121,23 @@
 
 					<td><?= htmlspecialchars($utilisateur->prenom) ?></td>
 					<td><?= htmlspecialchars($utilisateur->nom) ?></td>
-					<td><?= htmlspecialchars($utilisateur->email) ?></td>
+					<td>
+						<?php if (in_array($utilisateur->id_role, [4,5])): ?>
+							<?= htmlspecialchars($utilisateur->identifiant) ?>
+						<?php else: ?>
+							<?= htmlspecialchars($utilisateur->email) ?>
+						<?php endif; ?>
+					</td>
 					<td><?= htmlspecialchars($utilisateur->nom_role ? strtoupper($utilisateur->nom_role) : 'N/A') ?></td>
 					<td><?= isset($utilisateur->date_creation) ? date('d/m/Y H:i', strtotime($utilisateur->date_creation)) : '25/11/2024 10:33' ?></td>
 					<td>
-						<a href="<?= site_url('admin/modifier_utilisateur/'.$utilisateur->id) ?>" class="text-decoration-none">
+						<span data-id="<?= $utilisateur->id_utilisateur ?>" data-role="<?= $utilisateur->id_role ?>" class="btn-edit-user text-decoration-none" style="cursor: pointer;">
 							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square action-icon" viewBox="0 0 16 16" title="Modifier">
 								<path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
 								<path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
 							</svg>
-						</a>
-
-
-						<span data-id="<?= $utilisateur->id ?>" class="btn-delete-client text-decoration-none">
+						</span>
+						<span data-id="<?= $utilisateur->id_utilisateur ?>" class="btn-delete-client text-decoration-none">
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill action-icon delete-icon" viewBox="0 0 16 16" title="Supprimer">
 							<path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
 						</svg>
@@ -161,6 +170,63 @@
 
 					popup.show();
 					$('#popup-add-user').on('hidden.bs.modal', function () {
+						$(this).remove();
+					});
+				},
+				error: function () {
+					alert("Erreur lors du chargement de la pop-up.");
+				}
+			});
+		});
+
+		// Logique pour modifier un utilisateur
+		$(document).on('click', '.btn-edit-user', function (e) {
+			e.preventDefault();
+			const userId = $(this).data('id');
+			const userRole = $(this).data('role');
+			
+			$.ajax({
+				url: siteUrl + '/utilisateurs/load_edit_users_popup',
+				method: 'GET',
+				data: {
+					user_id: userId,
+					user_role: userRole
+				},
+				success: function (data) {
+					$('#popup-edit-user').remove();
+					$('body').append(data);
+					const popup = new bootstrap.Modal(document.getElementById('modalModifierUtilisateur'), {
+						backdrop: 'static',
+						keyboard: false
+					});
+
+					popup.show();
+					$('#popup-edit-user').on('hidden.bs.modal', function () {
+						$(this).remove();
+					});
+				},
+				error: function () {
+					alert("Erreur lors du chargement de la pop-up de modification.");
+				}
+			});
+		});
+
+		// Logique pour ajouter un utilisateur avec identifiant
+		$('.btn-ajouter-user-identifiant').on('click', function (e) {
+			e.preventDefault();
+			$.ajax({
+				url: siteUrl + '/utilisateurs/load_add_users_identifiant_popup',
+				method: 'GET',
+				success: function (data) {
+					$('#popup-add-user-identifiant').remove();
+					$('body').append(data);
+					const popup = new bootstrap.Modal(document.getElementById('modalAjouterUtilisateurIdentifiant'), {
+						backdrop: 'static',
+						keyboard: false
+					});
+
+					popup.show();
+					$('#popup-add-user-identifiant').on('hidden.bs.modal', function () {
 						$(this).remove();
 					});
 				},

@@ -4,7 +4,49 @@ if (!isset($user) || in_array($user->id_role, [5, 6])) {
 }
 ?>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<style>
+    .navbar-custom {
+        background: linear-gradient(90deg, #2d3651 0%, #667eea 100%);
+        box-shadow: 0 2px 12px rgba(44, 62, 80, 0.10);
+        margin-bottom: 24px;
+    }
+    .navbar-custom .navbar-brand {
+        font-weight: 700;
+        font-size: 1.35rem;
+        letter-spacing: 1px;
+        color: #fff !important;
+        text-shadow: 0 2px 8px rgba(44,62,80,0.10);
+    }
+    .navbar-custom .nav-link {
+        color: #e3e6f0 !important;
+        font-weight: 500;
+        border-radius: 8px;
+        margin-right: 6px;
+        transition: background 0.18s, color 0.18s;
+    }
+    .navbar-custom .nav-link:hover, .navbar-custom .nav-link.active {
+        background: #fff;
+        color: #667eea !important;
+    }
+    .navbar-custom .btn-logout {
+        background: linear-gradient(90deg, #e74c3c 0%, #ff7675 100%);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        padding: 6px 16px;
+        margin-left: 10px;
+        box-shadow: 0 1px 4px rgba(44, 62, 80, 0.10);
+        transition: background 0.18s, box-shadow 0.18s;
+    }
+    .navbar-custom .btn-logout:hover {
+        background: linear-gradient(90deg, #ff7675 0%, #e74c3c 100%);
+        color: #fff;
+        box-shadow: 0 4px 16px rgba(231, 76, 60, 0.18);
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-custom">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="#">FASHION-CHIC</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +90,9 @@ if (!isset($user) || in_array($user->id_role, [5, 6])) {
 
 			<ul class="navbar-nav ms-auto">
 				<li class="nav-item">
-					<a class="nav-link" href="<?=site_url('login/logout')?>">Déconnexion</a>
+					<a class="btn btn-logout" href="<?=site_url('login/logout')?>">
+						<i class="bi bi-box-arrow-right"></i> Déconnexion
+					</a>
 				</li>
 			</ul>
 		</div>
