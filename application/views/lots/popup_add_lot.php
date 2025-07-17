@@ -95,8 +95,12 @@
 							<tr>
 								<th>Référence</th>
 								<th>Nom</th>
+								<th>Catégorie</th>
+								<th>Genre</th>
 								<th>Taille</th>
-								<th>couleur</th>
+								<th>Couleur</th>
+								<th>Marque</th>
+								<th>Prix vente</th>
 								<th>Quantité disponible</th>
 								<th>Quantité à ajouter</th>
 							</tr>
@@ -106,10 +110,13 @@
 								<tr>
 									<td><?= htmlspecialchars($produit->reference) ?></td>
 									<td><?= htmlspecialchars($produit->nom) ?></td>
+									<td><?= htmlspecialchars($produit->categorie) ?></td>
+									<td><?= htmlspecialchars($produit->genre) ?></td>
 									<td><?= htmlspecialchars($produit->taille) ?></td>
 									<td><?= htmlspecialchars($produit->couleur) ?></td>
+									<td><?= htmlspecialchars($produit->marque) ?></td>
+									<td><?= isset($produit->prix_vente) ? number_format($produit->prix_vente, 2, ',', ' ') . ' €' : '' ?></td>
 									<td><?= (int)$produit->quantite ?></td>
-
 									<td>
 										<input type="number" name="quantites[<?= $produit->id_produit ?>]" class="form-control form-control-sm" min="0" max="<?= (int)$produit->quantite ?>">
 									</td>

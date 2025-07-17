@@ -19,7 +19,7 @@ class Lot extends CI_Model {
 
 	public function getContenuLot($id_lot)
 	{
-		$this->db->select('p.reference, p.nom, p.taille, p.couleur, cl.quantite');
+		$this->db->select('p.reference, p.nom, p.categorie, p.genre, p.taille, p.couleur, p.marque, p.prix_vente, cl.quantite');
 		$this->db->from('CONTENU_LOT cl');
 		$this->db->join('PRODUIT p', 'cl.id_produit = p.id_produit');
 		$this->db->where('cl.id_lot', $id_lot);
@@ -95,5 +95,16 @@ class Lot extends CI_Model {
 		$this->db->trans_complete();
 
 		return $this->db->trans_status();
+	}
+
+	public function getLotsByCommande($id_commande)
+	{
+		$this->db->select('cl.id_lot, l.nom, SUM(cl.quantite) as quantite');
+		$this->db->from('COMMANDE_LOT cl');
+		$this->db->join('LOT l', 'cl.id_lot = l.id_lot');
+		$this->db->where('cl.id_commande', $id_commande);
+		$this->db->group_by(['cl.id_lot', 'l.nom']);
+		$query = $this->db->get();
+		return $query->result();
 	}
 }

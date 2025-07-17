@@ -46,8 +46,12 @@
 						<tr>
 							<th>Référence</th>
 							<th>Nom du produit</th>
+							<th>Catégorie</th>
+							<th>Genre</th>
 							<th>Taille</th>
 							<th>Couleur</th>
+							<th>Marque</th>
+							<th>Prix vente</th>
 							<th>Quantité</th>
 						</tr>
 						</thead>
@@ -56,8 +60,12 @@
 							<tr>
 								<td><?= htmlspecialchars($produit->reference ?? '') ?></td>
 								<td><?= htmlspecialchars($produit->nom ?? '') ?></td>
+								<td><?= htmlspecialchars($produit->categorie ?? '') ?></td>
+								<td><?= htmlspecialchars($produit->genre ?? '') ?></td>
 								<td><?= htmlspecialchars($produit->taille ?? '') ?></td>
 								<td><?= htmlspecialchars($produit->couleur ?? '') ?></td>
+								<td><?= htmlspecialchars($produit->marque ?? '') ?></td>
+								<td><?= isset($produit->prix_vente) ? number_format($produit->prix_vente, 2, ',', ' ') . ' €' : '' ?></td>
 								<td><?= htmlspecialchars($produit->quantite ?? '') ?></td>
 							</tr>
 						<?php endforeach; ?>

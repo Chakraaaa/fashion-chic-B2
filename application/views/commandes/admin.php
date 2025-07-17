@@ -209,6 +209,9 @@ if (!function_exists('getUserNameById')) {
 						<button class="btn btn-danger btn-sm btn-delete-commande" data-id="<?= $commande->id_commande ?>">
 							<i class="bi bi-trash-fill"></i>
 						</button>
+						<button class="btn btn-primary btn-sm btn-view-contenu-commande" data-id="<?= $commande->id_commande ?>" title="Voir le contenu">
+							<i class="bi bi-eye"></i>
+						</button>
 					</td>
 				</tr>
 			<?php endforeach; ?>

@@ -354,4 +354,14 @@ class Commandes extends MY_Controller {
 		redirect('commandes');
 	}
 
+	public function load_contenu_commande($id_commande)
+	{
+		$this->load->model('Lot');
+		$lots_commande = $this->Lot->getLotsByCommande($id_commande);
+		$data = [
+			'lots_commande' => $lots_commande
+		];
+		$this->load->view('commandes/popup_contenu_commande', $data);
+	}
+
 }
