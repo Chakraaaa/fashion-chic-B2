@@ -1,12 +1,12 @@
 <style>
     body {
-        background: #f6f7fb;
+        background: #F0E6D1;;
         font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
     }
     .main-card {
         background: #fff;
         border-radius: 18px;
-        box-shadow: 0 4px 24px rgba(44, 62, 80, 0.08);
+		box-shadow: 10px 10px #E4D0AA;
         padding: 32px 28px 24px 28px;
         margin-bottom: 32px;
     }
@@ -14,9 +14,12 @@
         color: #2d3651;
         letter-spacing: 0.5px;
     }
+	.h4{
+		font-size: 35px;
+	}
     .btn-primary, .btn-primary:focus {
-        background: linear-gradient(90deg, #2d3651 0%, #667eea 100%);
-        border: none;
+		background-color: #ba9b61;
+		border: none;
         color: #fff;
         font-weight: 500;
         border-radius: 8px;
@@ -24,8 +27,8 @@
         transition: background 0.2s, box-shadow 0.2s;
     }
     .btn-primary:hover {
-        background: linear-gradient(90deg, #667eea 0%, #2d3651 100%);
-        color: #fff;
+        background-color: #c5c1b7;
+        color: black;
         box-shadow: 0 4px 16px rgba(44, 62, 80, 0.12);
     }
     .btn-danger {
@@ -33,19 +36,20 @@
     }
     .table {
         border-radius: 14px;
+
         overflow: hidden;
         box-shadow: 0 2px 12px rgba(44, 62, 80, 0.06);
         background: #fff;
     }
-    .table thead th {
-        background: linear-gradient(90deg, #667eea 0%, #2d3651 100%);
-        color: #fff;
-        font-weight: 600;
-        border: none;
-        padding: 16px 12px;
-        letter-spacing: 0.5px;
-    }
-    .table-striped > tbody > tr:nth-of-type(odd) {
+	.table thead th {
+		background-color: #ba9b61;
+		color: #fff;
+		font-weight: 600;
+		border: none;
+		padding: 16px 12px;
+		letter-spacing: 0.5px;
+	}
+	.table-striped > tbody > tr:nth-of-type(odd) {
         background-color: #f6f7fb;
     }
     .table-hover tbody tr:hover {
@@ -96,7 +100,7 @@
     .table tbody tr:hover {
         background: #f0f4ff;
         box-shadow: 0 2px 12px rgba(102, 126, 234, 0.10);
-        border-left: 4px solid #667eea;
+        border-left: 4px solid #ba9b61;
     }
     .table tbody tr {
         border-bottom: 1.5px solid #e3e6f0;
@@ -115,23 +119,56 @@
         box-shadow: 0 4px 16px rgba(102, 126, 234, 0.18);
         opacity: 0.92;
     }
-    .btn-supprimer-produit {
-        background: linear-gradient(90deg, #e74c3c 0%, #ff7675 100%);
-        color: #fff;
-        border: none;
-    }
-    .btn-supprimer-produit:hover {
-        background: linear-gradient(90deg, #ff7675 0%, #e74c3c 100%);
-        color: #fff;
-    }
+	.btn-supprimer-produit {
+		background: linear-gradient(90deg, #e74c3c 0%, #ff7675 100%);
+		border: none;
+		color: #fff;
+		font-weight: 600;
+		border-radius: 12px;
+		padding: 10px 24px;
+		font-size: 1rem;
+		box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+		transition: all 0.3s ease;
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.btn-supprimer-produit:hover {
+		background: linear-gradient(90deg, #ff7675 0%, #e74c3c 100%);
+		box-shadow: 0 6px 16px rgba(231, 76, 60, 0.5);
+		transform: scale(1.05);
+	}
+	#search-input {
+		border: 2px solid #ba9b61; /* bordure initiale */
+		border-radius: 8px;
+		background-color: #fff;
+		box-shadow: none;
+		transition: all 0.2s ease;
+		color: #2d3651;
+		padding: 10px 16px;
+		font-size: 16px;
+	}
+
+	/* Effet au clic */
+	#search-input:focus {
+		outline: none; /* Supprime la bordure bleue par défaut */
+		border: 2px solid #E4D0AA; /* couleur de bordure personnalisée */
+		box-shadow: 0 0 6px rgba(186, 155, 97, 0.4); /* halo doux */
+
 </style>
 
 <div class="container mt-4">
 	<div class="main-card">
-		<div class="d-flex justify-content-between align-items-center mb-3">
-			<h1 class="h4 fw-semibold">Liste des stocks</h1>
-			<div class="d-flex gap-2">
-				<button class="btn btn-primary" id="btn-import-stocks">
+		<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+			<h1 class="h4 fw-semibold mb-2 mb-md-0">Liste des stocks</h1>
+
+			<div class="d-flex flex-grow-1 justify-content-center order-2 order-md-1 mb-2 mb-md-0">
+				<input type="text" id="search-input" class="form-control" placeholder="Rechercher un produit par nom ou référence..." style="max-width: 400px;">
+			</div>
+
+			<div class="d-flex gap-2 order-1 order-md-2">
+				<button class="btn btn-primary btnimport" id="btn-import-stocks">
 					<i class="fas fa-plus me-1"></i> Importer des stocks
 				</button>
 				<button class="btn btn-primary" id="btn-export-stocks">
@@ -139,6 +176,7 @@
 				</button>
 			</div>
 		</div>
+
 
 		<table class="table table-striped table-hover">
 			<thead class="table-light">
@@ -166,7 +204,7 @@
 								data-id="<?= $produit->id_produit ?>"
 								data-nom="<?= htmlspecialchars($produit->nom) ?>"
 								data-quantite="<?= $produit->quantite ?>">
-								<i class="fas fa-trash-alt"></i> Supprimer
+								<i class="fas fa-trash-alt"></i>
 							</button>
 						</td>
 					</tr>
@@ -205,6 +243,15 @@
 <div id="popup-import-stocks" style="display: none;"></div>
 
 <script>
+	// Recherche en direct dans le tableau
+	$('#search-input').on('keyup', function () {
+		const value = $(this).val().toLowerCase();
+		$('table tbody tr').filter(function () {
+			const nom = $(this).find('td:eq(0)').text().toLowerCase();
+			const reference = $(this).find('td:eq(1)').text().toLowerCase();
+			$(this).toggle(nom.includes(value) || reference.includes(value));
+		});
+	});
 	$(document).ready(function () {
 		$('#btn-import-stocks').on('click', function (e) {
 			e.preventDefault();

@@ -1,3 +1,33 @@
+<style>
+	.modal-title {
+		text-align: center;
+		width: 100%;
+		margin: 0 auto;
+
+	}
+	.modal-content {
+		border-radius: 16px;
+		box-shadow: 0 8px 32px rgba(44, 62, 80, 0.12);
+	}
+	.modal-header {
+		border-radius: 16px 16px 0 0;
+		background: #f6f7fb;
+		border-bottom: 1px solid #e3e6f0;
+		background: linear-gradient(90deg, #ba9b61 0%, #E4D0AA 100%) !important;
+
+	}
+	.modal-title {
+		color: #2d3651;
+		font-weight: 600;
+	}
+	.modal-footer {
+		border: none;
+		background: none;
+
+	}
+</style>
+
+
 <div class="modal fade" id="popupImportStocks" tabindex="-1" aria-labelledby="popupImportStocksLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<form method="post" action="<?= site_url('stocks/import_csv') ?>" enctype="multipart/form-data" class="modal-content">

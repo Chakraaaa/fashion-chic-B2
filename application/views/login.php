@@ -1,8 +1,8 @@
 <style>
-    body {
-        background: #f6f7fb;
-        font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
-    }
+	body {
+		background: #F0E6D1;
+		font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+	}
     .card {
         border-radius: 18px;
         box-shadow: 0 4px 24px rgba(44, 62, 80, 0.10);
@@ -10,7 +10,7 @@
         background: #fff;
     }
     .card-header {
-        background: linear-gradient(90deg, #2d3651 0%, #667eea 100%) !important;
+        background: linear-gradient(90deg, #ba9b61 0%, #E4D0AA 100%) !important;
         color: #fff !important;
         border-radius: 18px 18px 0 0 !important;
         border-bottom: none;
@@ -27,11 +27,11 @@
         transition: border-color 0.2s;
     }
     .form-control:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 2px rgba(102,126,234,0.12);
+		border-color: #ba9b61;
+		box-shadow: 0 0 0 2px #ba9b61;
     }
     .btn-primary, .btn-primary:focus {
-        background: linear-gradient(90deg, #2d3651 0%, #667eea 100%);
+		background: linear-gradient(90deg, #ba9b61 0%, #E4D0AA 100%) !important;
         border: none;
         color: #fff;
         font-weight: 500;
@@ -72,7 +72,6 @@
 </style>
 
 <!-- Ajout des icônes Font Awesome -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
 <div class="row justify-content-center mt-5">
 	<div class="col-md-6 col-lg-4">

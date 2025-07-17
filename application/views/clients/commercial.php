@@ -1,12 +1,12 @@
 <style>
     body {
-        background: #f6f7fb;
+		background: #F0E6D1;
         font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
     }
     .main-card {
         background: #fff;
         border-radius: 18px;
-        box-shadow: 0 4px 24px rgba(44, 62, 80, 0.08);
+		box-shadow: 10px 10px #E4D0AA;
         padding: 32px 28px 24px 28px;
         margin-bottom: 32px;
     }
@@ -14,22 +14,26 @@
         color: #2d3651;
         letter-spacing: 0.5px;
     }
-    .btn-primary, .btn-primary:focus {
-        background: linear-gradient(90deg, #2d3651 0%, #667eea 100%);
-        border: none;
-        color: #fff;
-        font-weight: 500;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
-        transition: background 0.2s, box-shadow 0.2s;
-    }
-    .btn-primary:hover {
-        background: linear-gradient(90deg, #667eea 0%, #2d3651 100%);
-        color: #fff;
-        box-shadow: 0 4px 16px rgba(44, 62, 80, 0.12);
-    }
+	.h4{
+		font-size: 35px;
+	}
+	.btn-primary, .btn-primary:focus {
+		background-color: #ba9b61 !important;
+		border: none;
+		color: #fff;
+		font-weight: 500;
+		border-radius: 8px;
+		box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+		transition: background 0.2s, box-shadow 0.2s;
+	}
+
+	.btn-primary:hover {
+		background-color: #c5c1b7;
+		color: black;
+		box-shadow: 0 4px 16px rgba(44, 62, 80, 0.12);
+	}
     .btn-info {
-        background: linear-gradient(90deg, #36d1c4 0%, #5b86e5 100%);
+		background-color: #ba9b61;
         color: #fff;
         border: none;
         border-radius: 8px;
@@ -38,7 +42,7 @@
         transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
     }
     .btn-info:hover {
-        background: linear-gradient(90deg, #5b86e5 0%, #36d1c4 100%);
+		background-color: #c5c1b7;
         color: #fff;
         transform: scale(1.08);
         box-shadow: 0 4px 16px rgba(91, 134, 229, 0.18);
@@ -64,7 +68,7 @@
         background: #fff;
     }
     .table thead th {
-        background: linear-gradient(90deg, #667eea 0%, #2d3651 100%);
+		background-color: #ba9b61;
         color: #fff;
         font-weight: 600;
         border: none;
@@ -86,7 +90,7 @@
     .table tbody tr:hover {
         background: #f0f4ff;
         box-shadow: 0 2px 12px rgba(102, 126, 234, 0.10);
-        border-left: 4px solid #667eea;
+		border-left: 4px solid #ba9b61;
     }
     .alert {
         border-radius: 10px;
