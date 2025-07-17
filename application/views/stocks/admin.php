@@ -145,9 +145,17 @@
 			<tr>
 				<th>Nom</th>
 				<th>Référence</th>
+				<th>Catégorie</th>
+				<th>Genre</th>
 				<th>Taille</th>
 				<th>Couleur</th>
+				<th>Marque</th>
+				<th>Prix achat</th>
+				<th>Prix vente</th>
 				<th>Quantité</th>
+				<th>Seuil réappro</th>
+				<th>Date ajout</th>
+				<th>Date modif</th>
 				<th>Actions</th>
 			</tr>
 			</thead>
@@ -157,12 +165,45 @@
 					<tr>
 						<td><?= htmlspecialchars($produit->nom) ?></td>
 						<td><?= htmlspecialchars($produit->reference) ?></td>
+						<td><?= htmlspecialchars($produit->categorie) ?></td>
+						<td><?= htmlspecialchars($produit->genre) ?></td>
 						<td><?= htmlspecialchars($produit->taille) ?></td>
 						<td><?= htmlspecialchars($produit->couleur) ?></td>
+						<td><?= htmlspecialchars($produit->marque) ?></td>
+						<td><?= isset($produit->prix_achat) ? number_format($produit->prix_achat, 2, ',', ' ') . ' €' : '' ?></td>
+						<td><?= isset($produit->prix_vente) ? number_format($produit->prix_vente, 2, ',', ' ') . ' €' : '' ?></td>
 						<td><?= htmlspecialchars($produit->quantite) ?></td>
-						<td>
+						<td><?= htmlspecialchars($produit->seuil_reappro) ?></td>
+						<td><?= isset($produit->date_ajout) ? date('d/m/Y H:i', strtotime($produit->date_ajout)) : '' ?></td>
+						<td><?= isset($produit->date_modif) ? date('d/m/Y H:i', strtotime($produit->date_modif)) : '' ?></td>
+						<td class="d-flex gap-1">
+							<!-- Éditer -->
 							<button
-								class="btn btn-action btn-supprimer-produit"
+								class="btn btn-sm btn-outline-primary btn-edit-produit"
+								title="Éditer"
+								data-id="<?= $produit->id_produit ?>"
+								data-nom="<?= htmlspecialchars($produit->nom) ?>"
+								data-reference="<?= htmlspecialchars($produit->reference) ?>"
+								data-categorie="<?= htmlspecialchars($produit->categorie) ?>"
+								data-genre="<?= htmlspecialchars($produit->genre) ?>"
+								data-taille="<?= htmlspecialchars($produit->taille) ?>"
+								data-couleur="<?= htmlspecialchars($produit->couleur) ?>"
+								data-marque="<?= htmlspecialchars($produit->marque) ?>"
+								data-prix_achat="<?= htmlspecialchars($produit->prix_achat) ?>"
+								data-prix_vente="<?= htmlspecialchars($produit->prix_vente) ?>"
+								data-quantite="<?= htmlspecialchars($produit->quantite) ?>"
+								data-seuil_reappro="<?= htmlspecialchars($produit->seuil_reappro) ?>"
+								data-date_ajout="<?= isset($produit->date_ajout) ? date('d/m/Y H:i', strtotime($produit->date_ajout)) : '' ?>"
+								data-date_modif="<?= isset($produit->date_modif) ? date('d/m/Y H:i', strtotime($produit->date_modif)) : '' ?>"
+								data-bs-toggle="modal"
+							>
+								<i class="fas fa-edit"></i>
+							</button>
+
+							<!-- Supprimer -->
+							<button
+								class="btn btn-sm btn-outline-danger btn-supprimer-produit"
+								title="Supprimer"
 								data-id="<?= $produit->id_produit ?>"
 								data-nom="<?= htmlspecialchars($produit->nom) ?>"
 								data-quantite="<?= $produit->quantite ?>">
@@ -172,13 +213,14 @@
 					</tr>
 				<?php endforeach; ?>
 			<?php else: ?>
-				<tr><td colspan="6" class="text-center">Aucun produit en stock.</td></tr>
+				<tr><td colspan="14" class="text-center">Aucun produit en stock.</td></tr>
 			<?php endif; ?>
 			</tbody>
 		</table>
 	</div>
 </div>
 
+<!-- Modal suppression -->
 <div class="modal fade" id="popupSupprimerProduit" tabindex="-1" aria-labelledby="popupLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<form method="post" action="<?= site_url('stocks/supprimer_quantite') ?>">
@@ -202,27 +244,25 @@
 	</div>
 </div>
 
+<!-- Popups dynamiques -->
 <div id="popup-import-stocks" style="display: none;"></div>
+<div id="popup-edit-produit" style="display: none;"></div>
 
 <script>
 	$(document).ready(function () {
 		$('#btn-import-stocks').on('click', function (e) {
 			e.preventDefault();
-
 			$.ajax({
 				url: siteUrl + '/stocks/load_import_popup',
 				method: 'GET',
 				success: function (data) {
 					$('#popup-import-stocks').remove();
 					$('body').append(data);
-
 					const popup = new bootstrap.Modal(document.getElementById('popupImportStocks'), {
 						backdrop: 'static',
 						keyboard: false
 					});
-
 					popup.show();
-
 					$('#popup-import-stocks').on('hidden.bs.modal', function () {
 						$(this).remove();
 					});
@@ -232,29 +272,52 @@
 				}
 			});
 		});
-	});
 
-	$('#btn-export-stocks').on('click', function () {
-		if (confirm("Voulez-vous vraiment exporter les stocks en fichier csv?")) {
-			window.location.href = siteUrl + '/stocks/export_csv';
-		}
-	});
+		$('#btn-export-stocks').on('click', function () {
+			if (confirm("Voulez-vous vraiment exporter les stocks en fichier csv?")) {
+				window.location.href = siteUrl + '/stocks/export_csv';
+			}
+		});
 
-	$(document).on('click', '.btn-supprimer-produit', function () {
-		const id = $(this).data('id');
-		const nom = $(this).data('nom');
-		const quantiteMax = parseInt($(this).data('quantite'));
+		$(document).on('click', '.btn-supprimer-produit', function () {
+			const id = $(this).data('id');
+			const nom = $(this).data('nom');
+			const quantiteMax = parseInt($(this).data('quantite'));
+			$('#id_produit_modal').val(id);
+			$('#info-produit').text(`Produit : ${nom} — Stock actuel : ${quantiteMax}`);
+			const select = $('#quantite_select');
+			select.empty();
+			for (let i = 1; i <= quantiteMax; i++) {
+				select.append(`<option value="${i}">${i}</option>`);
+			}
+			const popup = new bootstrap.Modal(document.getElementById('popupSupprimerProduit'));
+			popup.show();
+		});
 
-		$('#id_produit_modal').val(id);
-		$('#info-produit').text(`Produit : ${nom} — Stock actuel : ${quantiteMax}`);
-
-		const select = $('#quantite_select');
-		select.empty();
-		for (let i = 1; i <= quantiteMax; i++) {
-			select.append(`<option value="${i}">${i}</option>`);
-		}
-
-		const popup = new bootstrap.Modal(document.getElementById('popupSupprimerProduit'));
-		popup.show();
+		$(document).on('click', '.btn-edit-produit', function (e) {
+			e.preventDefault();
+			const idProduit = $(this).data('id');
+			$.ajax({
+				url: siteUrl + '/stocks/load_edit_produit_popup',
+				method: 'GET',
+				data: { id_produit: idProduit },
+				success: function (data) {
+					$('#popup-edit-produit').remove();
+					$('body').append(data);
+					const popup = new bootstrap.Modal(document.getElementById('popupEditProduit'), {
+						backdrop: 'static',
+						keyboard: false
+					});
+					popup.show();
+					$('#popupEditProduit').on('hidden.bs.modal', function () {
+						$(this).remove();
+					});
+				},
+				error: function () {
+					alert("Erreur lors du chargement de la pop-up d'édition.");
+				}
+			});
+		});
 	});
 </script>
+
