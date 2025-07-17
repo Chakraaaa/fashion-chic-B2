@@ -1,12 +1,12 @@
 <style>
     .modal-content {
         border-radius: 16px;
-        box-shadow: 0 8px 32px rgba(44, 62, 80, 0.15);
+		box-shadow: 10px 10px #E4D0AA;
         border: none;
         background: #fff;
     }
     .modal-header {
-        background: linear-gradient(90deg, #2d3651 0%, #667eea 100%);
+		background-color: #ba9b61 !important;
         color: #fff;
         border-radius: 16px 16px 0 0;
         border-bottom: none;
@@ -26,11 +26,11 @@
         transition: border-color 0.2s;
     }
     .form-control:focus, .form-select:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 2px rgba(102,126,234,0.12);
+		border-color: #ba9b61;
+        box-shadow: 0 0 0 2px #ba9b61;
     }
     .btn-primary, .btn-primary:focus {
-        background: linear-gradient(90deg, #2d3651 0%, #667eea 100%);
+		background-color: #ba9b61 !important;
         border: none;
         color: #fff;
         font-weight: 500;
@@ -149,4 +149,4 @@
 			</div>
 		</div>
 	</div>
-</div> 
+</div>

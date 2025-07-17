@@ -19,7 +19,7 @@ class Lot extends CI_Model {
 
 	public function getContenuLot($id_lot)
 	{
-		$this->db->select('p.reference, p.nom, cl.quantite');
+		$this->db->select('p.reference, p.nom, p.taille, p.couleur, cl.quantite');
 		$this->db->from('CONTENU_LOT cl');
 		$this->db->join('PRODUIT p', 'cl.id_produit = p.id_produit');
 		$this->db->where('cl.id_lot', $id_lot);

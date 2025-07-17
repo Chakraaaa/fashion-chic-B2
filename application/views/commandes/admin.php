@@ -1,6 +1,25 @@
 <style>
+	body {
+		background: #F0E6D1;
+		font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+	}
+	.h4{
+		font-size: 35px;
+	}
+	.main-card {
+		background: #fff;
+		border-radius: 18px;
+		box-shadow: 10px 10px #E4D0AA;
+		padding: 32px 28px 24px 28px;
+		margin-bottom: 32px;
+		overflow-x: auto; /* Ajout important */
+		width: 100%;
+		max-width: 1400px; /* selon ta préférence */
+		margin-left: auto;
+		margin-right: auto;
+	}
 	.btn-ajouter {
-		background: linear-gradient(45deg, #007bff, #00c6ff);
+		background-color: #ba9b61 !important;
 		border: none;
 		color: white;
 		font-weight: 500;
@@ -10,10 +29,10 @@
 		box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 	}
 	.btn-ajouter:hover {
-		background: linear-gradient(45deg, #0056b3, #007bff);
+		background-color: #c5c1b7;
 		transform: translateY(-2px);
 		box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-		color: white;
+		color: black;
 	}
 	.table {
 		border-radius: 10px;
@@ -21,7 +40,7 @@
 		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 	}
 	.table thead th {
-		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		background-color: #ba9b61;
 		color: white;
 		font-weight: 600;
 		border: none;
@@ -70,14 +89,28 @@
 		<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 	</div>
 <?php endif; ?>
+<?php
+// Fonction utilitaire pour afficher le nom d'un utilisateur à partir d'une liste
+if (!function_exists('getUserNameById')) {
+	function getUserNameById($users, $id) {
+		foreach ($users as $u) {
+			if ($u->id_utilisateur == $id) {
+				return $u->prenom . ' ' . $u->nom;
+			}
+		}
+		return '';
+	}
+}
+?>
 
-<div class="container mt-4">
-	<div class="d-flex justify-content-between align-items-center mb-4">
-		<h1 class="h4 fw-semibold">Liste des commandes</h1>
-		<button class="btn btn-ajouter btn-ajouter-commande" data-bs-toggle="modal" data-bs-target="#modalAjouterCommande">
-			<i class="bi bi-plus-circle"></i> Ajouter une commande
-		</button>
-	</div>
+<div class="container-fluid mt-4">
+	<div class="main-card">
+		<div class="d-flex justify-content-between align-items-center mb-4">
+			<h1 class="h4 fw-semibold">Liste des commandes</h1>
+			<button class="btn btn-ajouter btn-ajouter-commande" data-bs-toggle="modal" data-bs-target="#modalAjouterCommande">
+				<i class="bi bi-plus-circle"></i> Ajouter une commande
+			</button>
+		</div>
 
 	<!-- Filtres -->
 	<form method="get" class="mb-3 d-flex gap-2 align-items-end">
@@ -119,17 +152,17 @@
 	<table class="table table-bordered bg-white rounded shadow-sm">
 		<thead class="table-light">
 		<tr>
-			<th>Numéro</th>
-			<th>Client</th>
-			<th>Commercial</th>
-			<th>Date</th>
-			<th>Statut</th>
-			<th>Priorité</th>
-			<th>Préparateur</th>
-			<th>Envoyeur</th>
-			<th>Commentaire</th>
-			<th>Coût total</th>
-			<th>Actions</th>
+			<th class="text-center">Numéro</th>
+			<th class="text-center">Client</th>
+			<th class="text-center">Commercial</th>
+			<th class="text-center">Date</th>
+			<th class="text-center">Statut</th>
+			<th class="text-center">Priorité</th>
+			<th class="text-center">Préparateur</th>
+			<th class="text-center">Envoyeur</th>
+			<th class="text-center">Commentaire</th>
+			<th class="text-center">Coût total</th>
+			<th class="text-center">Actions</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -155,11 +188,11 @@
 				}
 				?>
 				<tr <?= $bg ?>>
-					<td><?= htmlspecialchars($commande->numero_commande) ?></td>
-					<td><?= htmlspecialchars($commande->nom_client) ?></td>
-					<td><?= htmlspecialchars($commande->nom_commercial) ?></td>
+					<td><?= htmlspecialchars($commande->numero_commande ?? '') ?></td>
+					<td><?= htmlspecialchars($commande->nom_client ?? '') ?></td>
+					<td><?= htmlspecialchars($commande->nom_commercial ?? '') ?></td>
 					<td><?= date('d/m/Y', strtotime($commande->date_commande)) ?></td>
-					<td><?= htmlspecialchars($commande->statut) ?></td>
+					<td><?= htmlspecialchars($commande->statut ?? '') ?></td>
 					<td class="fw-bold text-center"> <?= $commande->priority_level ?> </td>
 					<td>
 						<?= isset($commande->id_preparateur) && $commande->id_preparateur ? htmlspecialchars(getUserNameById($preparateurs, $commande->id_preparateur)) : '<span class="text-muted">Non attribué</span>' ?>
@@ -167,7 +200,7 @@
 					<td>
 						<?= isset($commande->id_envoyeur) && $commande->id_envoyeur ? htmlspecialchars(getUserNameById($envoyeurs, $commande->id_envoyeur)) : '<span class="text-muted">Non attribué</span>' ?>
 					</td>
-					<td><?= htmlspecialchars($commande->commentaire) ?></td>
+					<td><?= htmlspecialchars($commande->commentaire ?? '') ?></td>
 					<td><?= number_format($commande->cout_total, 2, ',', ' ') ?> €</td>
 					<td>
 						<button class="btn btn-info btn-sm btn-edit-commande" data-id="<?= $commande->id_commande ?>">
@@ -182,26 +215,16 @@
 		<?php endif; ?>
 		</tbody>
 	</table>
+	</div>
 </div>
 
-<?php
-// Fonction utilitaire pour afficher le nom d'un utilisateur à partir d'une liste
-if (!function_exists('getUserNameById')) {
-	function getUserNameById($users, $id) {
-		foreach ($users as $u) {
-			if ($u->id_utilisateur == $id) {
-				return $u->prenom . ' ' . $u->nom;
-			}
-		}
-		return '';
-	}
-}
-?>
+
 
 <div id="popup-add-commande" style="display: none;"></div>
 <div id="popup-edit-commande" style="display: none;"></div>
 
 <script>
+
 $(document).ready(function () {
 	$('.btn-ajouter-commande').on('click', function (e) {
 		e.preventDefault();
@@ -265,4 +288,5 @@ $(document).ready(function () {
 		}
 	});
 });
+
 </script>

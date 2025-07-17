@@ -115,4 +115,6 @@ class Lots extends MY_Controller {
 		$this->load->view('lots/popup_contenu_lot', $data);
 	}
 
+
+
 }

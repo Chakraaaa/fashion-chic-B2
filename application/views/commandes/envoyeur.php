@@ -1,21 +1,29 @@
 <style>
     body {
-        background: #f6f7fb;
-        font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+		background: #F0E6D1;
+		font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
     }
-    .main-card {
-        background: #fff;
-        border-radius: 18px;
-        box-shadow: 0 4px 24px rgba(44, 62, 80, 0.08);
-        padding: 32px 28px 24px 28px;
-        margin-bottom: 32px;
-    }
+	.main-card {
+		background: #fff;
+		border-radius: 18px;
+		box-shadow: 10px 10px #E4D0AA;
+		padding: 32px 28px 24px 28px;
+		margin-bottom: 32px;
+		overflow-x: auto; /* Ajout important */
+		width: 100%;
+		max-width: 1400px; /* selon ta préférence */
+		margin-left: auto;
+		margin-right: auto;
+	}
     .h4, h1, h2, h3 {
         color: #2d3651;
         letter-spacing: 0.5px;
     }
+	.h4{
+		font-size: 35px;
+	}
     .btn-primary, .btn-primary:focus {
-        background: linear-gradient(90deg, #2d3651 0%, #667eea 100%);
+		background-color: #ba9b61 !important;
         border: none;
         color: #fff;
         font-weight: 500;
@@ -24,12 +32,12 @@
         transition: background 0.2s, box-shadow 0.2s;
     }
     .btn-primary:hover {
-        background: linear-gradient(90deg, #667eea 0%, #2d3651 100%);
-        color: #fff;
+		background-color: #c5c1b7;
+		color: #fff;
         box-shadow: 0 4px 16px rgba(44, 62, 80, 0.12);
     }
     .btn-info {
-        background: linear-gradient(90deg, #36d1c4 0%, #5b86e5 100%);
+		background-color: #ba9b61;
         color: #fff;
         border: none;
         border-radius: 8px;
@@ -38,8 +46,8 @@
         transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
     }
     .btn-info:hover {
-        background: linear-gradient(90deg, #5b86e5 0%, #36d1c4 100%);
-        color: #fff;
+		background-color: #c5c1b7;
+		color: #fff;
         transform: scale(1.08);
         box-shadow: 0 4px 16px rgba(91, 134, 229, 0.18);
     }
@@ -95,7 +103,7 @@
         background: #fff;
     }
     .table thead th {
-        background: linear-gradient(90deg, #667eea 0%, #2d3651 100%);
+		background-color: #ba9b61;
         color: #fff;
         font-weight: 600;
         border: none;
@@ -117,7 +125,7 @@
     .table tbody tr:hover {
         background: #f0f4ff;
         box-shadow: 0 2px 12px rgba(102, 126, 234, 0.10);
-        border-left: 4px solid #667eea;
+		border-left: 4px solid #ba9b61;
     }
     .alert {
         border-radius: 10px;
@@ -142,7 +150,7 @@
     }
 </style>
 
-<div class="container mt-4">
+<div class="container-fluid mt-4">
     <div class="main-card">
         <a href="<?= site_url('login/logout') ?>" class="btn btn-logout">
             <i class="bi bi-box-arrow-right"></i> Déconnexion
@@ -151,14 +159,14 @@
         <table class="table table-striped table-hover">
             <thead class="table-light">
             <tr>
-                <th>Numéro</th>
-                <th>Client</th>
-                <th>Date</th>
-                <th>Statut</th>
-                <th>Priorité</th>
-                <th>Commentaire</th>
-                <th>Lien de suivi</th>
-                <th>Actions</th>
+                <th class="text-center">Numéro</th>
+                <th class="text-center">Client</th>
+                <th class="text-center">Date</th>
+                <th class="text-center">Statut</th>
+                <th class="text-center">Priorité</th>
+                <th class="text-center">Commentaire</th>
+                <th class="text-center">Lien de suivi</th>
+                <th class="text-center">Actions</th>
             </tr>
             </thead>
             <tbody>

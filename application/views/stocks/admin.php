@@ -145,17 +145,9 @@
 			<tr>
 				<th>Nom</th>
 				<th>Référence</th>
-				<th>Catégorie</th>
-				<th>Genre</th>
 				<th>Taille</th>
 				<th>Couleur</th>
-				<th>Marque</th>
-				<th>Prix achat</th>
-				<th>Prix vente</th>
 				<th>Quantité</th>
-				<th>Seuil réappro</th>
-				<th>Date ajout</th>
-				<th>Date modif</th>
 				<th>Actions</th>
 			</tr>
 			</thead>
@@ -165,53 +157,22 @@
 					<tr>
 						<td><?= htmlspecialchars($produit->nom) ?></td>
 						<td><?= htmlspecialchars($produit->reference) ?></td>
-						<td><?= htmlspecialchars($produit->categorie) ?></td>
-						<td><?= htmlspecialchars($produit->genre) ?></td>
 						<td><?= htmlspecialchars($produit->taille) ?></td>
 						<td><?= htmlspecialchars($produit->couleur) ?></td>
-						<td><?= htmlspecialchars($produit->marque) ?></td>
-						<td><?= isset($produit->prix_achat) ? number_format($produit->prix_achat, 2, ',', ' ') . ' €' : '' ?></td>
-						<td><?= isset($produit->prix_vente) ? number_format($produit->prix_vente, 2, ',', ' ') . ' €' : '' ?></td>
 						<td><?= htmlspecialchars($produit->quantite) ?></td>
-						<td><?= htmlspecialchars($produit->seuil_reappro) ?></td>
-						<td><?= isset($produit->date_ajout) ? date('d/m/Y H:i', strtotime($produit->date_ajout)) : '' ?></td>
-						<td><?= isset($produit->date_modif) ? date('d/m/Y H:i', strtotime($produit->date_modif)) : '' ?></td>
 						<td>
-							<!-- Bouton édition (texte simple) -->
-							<button
-								class="btn btn-action btn-edit-produit me-1"
-								data-id="<?= $produit->id_produit ?>"
-								data-nom="<?= htmlspecialchars($produit->nom) ?>"
-								data-reference="<?= htmlspecialchars($produit->reference) ?>"
-								data-categorie="<?= htmlspecialchars($produit->categorie) ?>"
-								data-genre="<?= htmlspecialchars($produit->genre) ?>"
-								data-taille="<?= htmlspecialchars($produit->taille) ?>"
-								data-couleur="<?= htmlspecialchars($produit->couleur) ?>"
-								data-marque="<?= htmlspecialchars($produit->marque) ?>"
-								data-prix_achat="<?= htmlspecialchars($produit->prix_achat) ?>"
-								data-prix_vente="<?= htmlspecialchars($produit->prix_vente) ?>"
-								data-quantite="<?= htmlspecialchars($produit->quantite) ?>"
-								data-seuil_reappro="<?= htmlspecialchars($produit->seuil_reappro) ?>"
-								data-date_ajout="<?= isset($produit->date_ajout) ? date('d/m/Y H:i', strtotime($produit->date_ajout)) : '' ?>"
-								data-date_modif="<?= isset($produit->date_modif) ? date('d/m/Y H:i', strtotime($produit->date_modif)) : '' ?>"
-								data-bs-toggle="modal"
-								title="Éditer le produit"
-							>
-								Éditer
-							</button>
-							<!-- Bouton suppression -->
 							<button
 								class="btn btn-action btn-supprimer-produit"
 								data-id="<?= $produit->id_produit ?>"
 								data-nom="<?= htmlspecialchars($produit->nom) ?>"
 								data-quantite="<?= $produit->quantite ?>">
-								Supprimer
+								<i class="fas fa-trash-alt"></i>
 							</button>
 						</td>
 					</tr>
 				<?php endforeach; ?>
 			<?php else: ?>
-				<tr><td colspan="18" class="text-center">Aucun produit en stock.</td></tr>
+				<tr><td colspan="6" class="text-center">Aucun produit en stock.</td></tr>
 			<?php endif; ?>
 			</tbody>
 		</table>
@@ -242,7 +203,6 @@
 </div>
 
 <div id="popup-import-stocks" style="display: none;"></div>
-<div id="popup-edit-produit" style="display: none;"></div>
 
 <script>
 	$(document).ready(function () {
@@ -296,32 +256,5 @@
 
 		const popup = new bootstrap.Modal(document.getElementById('popupSupprimerProduit'));
 		popup.show();
-	});
-
-	// Logique ouverture pop-up édition produit
-	$(document).on('click', '.btn-edit-produit', function (e) {
-		e.preventDefault();
-		const idProduit = $(this).data('id');
-
-		$.ajax({
-			url: siteUrl + '/stocks/load_edit_produit_popup',
-			method: 'GET',
-			data: { id_produit: idProduit },
-			success: function (data) {
-				$('#popup-edit-produit').remove();
-				$('body').append(data);
-				const popup = new bootstrap.Modal(document.getElementById('popupEditProduit'), {
-					backdrop: 'static',
-					keyboard: false
-				});
-				popup.show();
-				$('#popupEditProduit').on('hidden.bs.modal', function () {
-					$(this).remove();
-				});
-			},
-			error: function () {
-				alert("Erreur lors du chargement de la pop-up d'édition.");
-			}
-		});
 	});
 </script>

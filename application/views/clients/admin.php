@@ -1,33 +1,37 @@
 <style>
-    body {
-        background: #f6f7fb;
-        font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
-    }
-    .main-card {
-        background: #fff;
-        border-radius: 18px;
-        box-shadow: 0 4px 24px rgba(44, 62, 80, 0.08);
-        padding: 32px 28px 24px 28px;
-        margin-bottom: 32px;
-    }
+	body {
+		background: #F0E6D1;
+		font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+	}
+	.main-card {
+		background: #fff;
+		border-radius: 18px;
+		box-shadow: 10px 10px #E4D0AA;
+		border:none;
+		padding: 32px 28px 24px 28px;
+		margin-bottom: 32px;
+	}
     .h4, h1, h2, h3 {
         color: #2d3651;
         letter-spacing: 0.5px;
     }
-    .btn-primary, .btn-primary:focus {
-        background: linear-gradient(90deg, #2d3651 0%, #667eea 100%);
-        border: none;
-        color: #fff;
-        font-weight: 500;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
-        transition: background 0.2s, box-shadow 0.2s;
-    }
-    .btn-primary:hover {
-        background: linear-gradient(90deg, #667eea 0%, #2d3651 100%);
-        color: #fff;
-        box-shadow: 0 4px 16px rgba(44, 62, 80, 0.12);
-    }
+	.h4{
+		font-size: 35px;
+	}
+	.btn-primary, .btn-primary:focus {
+		background-color: #ba9b61; !important;
+		border: none;
+		color: #fff;
+		font-weight: 500;
+		border-radius: 8px;
+		box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+		transition: background 0.2s, box-shadow 0.2s;
+	}
+	.btn-primary:hover {
+		background-color: #c5c1b7;
+		color: black;
+		box-shadow: 0 4px 16px rgba(44, 62, 80, 0.12);
+	}
     .btn-danger {
         border-radius: 8px;
     }
@@ -38,7 +42,7 @@
         background: #fff;
     }
     .table thead th {
-        background: linear-gradient(90deg, #667eea 0%, #2d3651 100%);
+		background-color: #ba9b61;
         color: #fff;
         font-weight: 600;
         border: none;
@@ -60,8 +64,9 @@
     .table tbody tr:hover {
         background: #f0f4ff;
         box-shadow: 0 2px 12px rgba(102, 126, 234, 0.10);
-        border-left: 4px solid #667eea;
+		border-left: 4px solid #ba9b61;
     }
+
     .btn-action {
         border-radius: 8px;
         font-weight: 500;
@@ -134,7 +139,7 @@
                         <td><?= htmlspecialchars($client->prenom_commercial . ' ' . $client->nom_commercial) ?></td>
                         <td>
                             <button class="btn btn-action btn-delete-client" data-id="<?= $client->id_client ?>">
-                                <i class="fas fa-trash-alt"></i> Supprimer
+                                <i class="fas fa-trash-alt"></i>
                             </button>
                         </td>
                     </tr>
@@ -147,7 +152,7 @@
     </div>
 </div>
 
-<div id="popup-add-client" style="display: none;"></div>
+<div id="popup-add-client" style="display: none; "></div>
 
 <script>
 	$(document).ready(function () {

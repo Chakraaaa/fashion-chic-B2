@@ -6,7 +6,7 @@ if (!isset($user) || in_array($user->id_role, [5, 6])) {
 
 <style>
     .navbar-custom {
-        background: linear-gradient(90deg, #2d3651 0%, #667eea 100%);
+        background-color: #ba9b61;
         box-shadow: 0 2px 12px rgba(44, 62, 80, 0.10);
         margin-bottom: 24px;
     }
@@ -26,7 +26,7 @@ if (!isset($user) || in_array($user->id_role, [5, 6])) {
     }
     .navbar-custom .nav-link:hover, .navbar-custom .nav-link.active {
         background: #fff;
-        color: #667eea !important;
+        color: #ba9b61 !important;
     }
     .navbar-custom .btn-logout {
         background: linear-gradient(90deg, #e74c3c 0%, #ff7675 100%);
@@ -44,18 +44,22 @@ if (!isset($user) || in_array($user->id_role, [5, 6])) {
         color: #fff;
         box-shadow: 0 4px 16px rgba(231, 76, 60, 0.18);
     }
+
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-custom">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="#">FASHION-CHIC</a>
+		<div class="card-header text-white text-center">
+			<img src="<?= base_url('assets/images/logo.png') ?>" alt="Logo de l'entreprise" style="max-height: 70px; display: block; margin-left: auto; margin-right: auto;">
+		</div>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 
-		<div class="collapse navbar-collapse" id="mainNavbar">
-			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
+		<div class="collapse navbar-collapse justify-content-center" id="mainNavbar">
+			<!-- Centrer les liens de navigation -->
+			<ul class="navbar-nav mx-auto mb-2 mb-lg-0">
 				<?php if (in_array($user->id_role, [1, 2, 3, 4])): ?>
 					<li class="nav-item">
 						<a class="nav-link" href="<?=site_url('stocks');?>">Stocks</a>
@@ -85,10 +89,10 @@ if (!isset($user) || in_array($user->id_role, [5, 6])) {
 						<a class="nav-link" href="<?=site_url('utilisateurs')?>">Utilisateurs</a>
 					</li>
 				<?php endif; ?>
-
 			</ul>
 
-			<ul class="navbar-nav ms-auto">
+			<!-- Bouton de déconnexion à droite -->
+			<ul class="navbar-nav ms-lg-auto mt-2 mt-lg-0">
 				<li class="nav-item">
 					<a class="btn btn-logout" href="<?=site_url('login/logout')?>">
 						<i class="bi bi-box-arrow-right"></i> Déconnexion
@@ -98,3 +102,4 @@ if (!isset($user) || in_array($user->id_role, [5, 6])) {
 		</div>
 	</div>
 </nav>
+

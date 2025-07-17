@@ -1,6 +1,20 @@
 <style>
+	body {
+		background: #F0E6D1;
+		font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+	}
+	.main-card {
+		background: #fff;
+		border-radius: 18px;
+		box-shadow: 10px 10px #E4D0AA;
+		padding: 32px 28px 24px 28px;
+		margin-bottom: 32px;
+	}
+	.h4{
+		font-size: 35px;
+	}
 		.btn-ajouter {
-			background: linear-gradient(45deg, #28a745, #20c997);
+			background-color: #ba9b61 !important;
 			border: none;
 			color: white;
 			font-weight: 500;
@@ -11,10 +25,10 @@
 		}
 
 		.btn-ajouter:hover {
-			background: linear-gradient(45deg, #218838, #1e7e34);
+			background-color: #c5c1b7;
+			color: black;
 			transform: translateY(-2px);
 			box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-			color: white;
 		}
 
 
@@ -25,17 +39,46 @@
 		}
 
 		.table thead th {
-			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			background-color: #ba9b61;
 			color: white;
 			font-weight: 600;
 			border: none;
 			padding: 15px 12px;
 		}
-
-		.table tbody tr:hover {
-			background-color: rgba(0, 123, 255, 0.05);
-			transition: background-color 0.2s ease;
-		}
+	.table tbody tr:hover {
+		background: #f0f4ff;
+		box-shadow: 0 2px 12px rgba(102, 126, 234, 0.10);
+		border-left: 4px solid #ba9b61;
+	}
+	.btn-danger {
+		border-radius: 8px;
+		background: linear-gradient(90deg, #e74c3c 0%, #ff7675 100%);
+		color: #fff;
+		border: none;
+		font-weight: 500;
+		transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+	}
+	.btn-danger:hover {
+		background: linear-gradient(90deg, #ff7675 0%, #e74c3c 100%);
+		color: #fff;
+		transform: scale(1.08);
+		box-shadow: 0 4px 16px rgba(231, 76, 60, 0.18);
+	}
+	.btn-edit {
+		background-color: #ba9b61;
+		color: #fff;
+		border: none;
+		border-radius: 8px;
+		font-weight: 500;
+		margin-right: 4px;
+		transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+	}
+	.btn-edit:hover {
+		background-color: #c5c1b7;
+		color: #fff;
+		transform: scale(1.08);
+		box-shadow: 0 4px 16px rgba(91, 134, 229, 0.18);
+	}
 
 		.modal-header {
 			border-radius: 10px 10px 0 0;
@@ -85,6 +128,7 @@
 <?php endif; ?>
 
 <div class="container mt-4">
+	<div class="main-card">
 	<div class="d-flex justify-content-between align-items-center mb-4">
 		<h1 class="h4 fw-semibold">Liste des utilisateurs </h1>
 		<div class="d-flex gap-2">
@@ -133,23 +177,20 @@
 					<td><?= isset($utilisateur->actif) && $utilisateur->actif ? 'Oui' : 'Non' ?></td>
 					<td><?= isset($utilisateur->date_creation) ? date('d/m/Y H:i', strtotime($utilisateur->date_creation)) : '25/11/2024 10:33' ?></td>
 					<td>
-						<span data-id="<?= $utilisateur->id_utilisateur ?>" data-role="<?= $utilisateur->id_role ?>" class="btn-edit-user text-decoration-none" style="cursor: pointer;">
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square action-icon" viewBox="0 0 16 16" title="Modifier">
-								<path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-								<path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-							</svg>
-						</span>
-						<span data-id="<?= $utilisateur->id_utilisateur ?>" class="btn-delete-client text-decoration-none">
-						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill action-icon delete-icon" viewBox="0 0 16 16" title="Supprimer">
-							<path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
-						</svg>
-					</span>
+						<button class="btn-edit-user btn btn-edit btn-sm btn-delete-lot" data-id="<?= $utilisateur->id_utilisateur ?>" data-role="<?= $utilisateur->id_role ?>">
+							<i class="fas fa-edit"></i>
+						</button>
+						<button class="btn-delete-client btn btn-danger btn-sm btn-delete-lot" data-id="<?= $utilisateur->id_utilisateur ?>">
+							<i class="fas fa-trash-alt"></i>
+						</button>
+
 					</td>
 				</tr>
 			<?php endforeach; ?>
 		<?php endif; ?>
 		</tbody>
 	</table>
+	</div>
 </div>
 
 

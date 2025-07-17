@@ -128,11 +128,6 @@
 								<?php endforeach; ?>
 							</select>
 						</div>
-						<div class="mb-3 form-check">
-    <input type="checkbox" class="form-check-input" id="desactiverCompte" name="desactiver_compte" value="1" <?= isset($utilisateur->actif) && !$utilisateur->actif ? 'checked' : '' ?>>
-    <label class="form-check-label" for="desactiverCompte">Désactiver le compte</label>
-    <input type="hidden" id="champActif" name="actif" value="<?= isset($utilisateur->actif) ? $utilisateur->actif : 1 ?>">
-</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -170,35 +165,5 @@ $(document).ready(function() {
 			}
 		});
 	});
-});
-$(function() {
-    function setFieldsState(disabled) {
-        $("#popupEditUser input, #popupEditUser select, #popupEditUser textarea").not("#desactiverCompte, #champActif, [type=hidden], [type=submit], [type=button]").prop('disabled', disabled);
-    }
-    function updateActifValue() {
-        if ($('#desactiverCompte').is(':checked')) {
-            $('#champActif').val(0);
-        } else {
-            $('#champActif').val(1);
-        }
-    }
-    $('#desactiverCompte').on('change', function() {
-        if ($(this).is(':checked')) {
-            if (confirm("Êtes-vous sûr de vouloir désactiver le compte ?")) {
-                setFieldsState(true);
-                updateActifValue();
-            } else {
-                $(this).prop('checked', false);
-            }
-        } else {
-            setFieldsState(false);
-            updateActifValue();
-        }
-    });
-    // Initial state on load
-    if ($('#desactiverCompte').is(':checked')) {
-        setFieldsState(true);
-        updateActifValue();
-    }
 });
 </script> 
