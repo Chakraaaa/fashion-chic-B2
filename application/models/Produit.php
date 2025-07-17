@@ -38,4 +38,15 @@ class Produit extends CI_Model {
 		$this->db->insert('produit', $data);
 	}
 
+	// Alias pour compatibilité avec le contrôleur
+	public function get_by_id($id) {
+		return $this->getProduitById($id);
+	}
+
+	// Mise à jour générique d'un produit par son id
+	public function update($id, $data) {
+		$this->db->where('id_produit', $id);
+		return $this->db->update('produit', $data);
+	}
+
 }

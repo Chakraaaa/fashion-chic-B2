@@ -104,6 +104,7 @@
 			<th>Nom</th>
 			<th>Email / Identifiant</th>
 			<th>Rôle</th>
+			<th>Actif</th>
 			<th>Date de création</th>
 			<th>Actions</th>
 		</tr>
@@ -111,7 +112,7 @@
 		<tbody>
 		<?php if (empty($utilisateurs)): ?>
 			<tr>
-				<td colspan="6" class="text-center text-muted py-4">
+				<td colspan="7" class="text-center text-muted py-4">
 					Aucun utilisateur trouvé
 				</td>
 			</tr>
@@ -125,10 +126,11 @@
 						<?php if (in_array($utilisateur->id_role, [4,5])): ?>
 							<?= htmlspecialchars($utilisateur->identifiant) ?>
 						<?php else: ?>
-							<?= htmlspecialchars($utilisateur->email) ?>
+							<?= htmlspecialchars($utilisateur->email) ?>	
 						<?php endif; ?>
 					</td>
 					<td><?= htmlspecialchars($utilisateur->nom_role ? strtoupper($utilisateur->nom_role) : 'N/A') ?></td>
+					<td><?= isset($utilisateur->actif) && $utilisateur->actif ? 'Oui' : 'Non' ?></td>
 					<td><?= isset($utilisateur->date_creation) ? date('d/m/Y H:i', strtotime($utilisateur->date_creation)) : '25/11/2024 10:33' ?></td>
 					<td>
 						<span data-id="<?= $utilisateur->id_utilisateur ?>" data-role="<?= $utilisateur->id_role ?>" class="btn-edit-user text-decoration-none" style="cursor: pointer;">

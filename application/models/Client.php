@@ -35,5 +35,11 @@ class Client extends CI_Model {
 		return $this->db->get()->result();
 	}
 
+	public function getClientById($id)
+	{
+		$this->db->where('id_client', $id);
+		return $this->db->get('client')->row();
+	}
+
 
 }

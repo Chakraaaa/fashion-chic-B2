@@ -23,9 +23,10 @@ class Utilisateurs extends MY_Controller
 
 	public function delete($id)
 	{
-		var_dump("test");
 		$this->load->model('Utilisateur');
 		$this->Utilisateur->deleteUser($id);
+		$this->session->set_flashdata('success', 'Utilisateur supprimé avec succès.');
+		redirect('utilisateurs');
 	}
 
 	public function load_add_users_popup()
@@ -67,6 +68,18 @@ class Utilisateurs extends MY_Controller
 		$this->Utilisateur->addUser($data);
 		$this->session->set_flashdata('success', 'Utilisateur ajouté avec succès');
 		redirect('utilisateurs');
+
+		// Envoi de l'email de bienvenue avec les identifiants
+		$this->load->library('email');
+		$this->email->from('no-reply@fashion-chic.com', 'FASHION CHIC');
+		$this->email->to($email);
+		$this->email->subject('Votre compte FASHION CHIC');
+		$prenom = $this->input->post('prenom');
+		$nom = $this->input->post('nom');
+		$mot_de_passe = $this->input->post('mot_de_passe');
+		$message = "Bonjour $prenom $nom,\n\nVotre compte a été créé.\nEmail de connexion : $email\nMot de passe : $mot_de_passe\n\nCordialement,\nFASHION CHIC";
+		$this->email->message($message);
+		$this->email->send();
 	}
 
 	public function saveNewUserIdentifiant()
@@ -137,6 +150,9 @@ class Utilisateurs extends MY_Controller
 			return;
 		}
 		
+		// Ajout de la gestion du champ 'actif'
+		$actif = $this->input->post('actif');
+
 		// Préparer les données selon le rôle
 		if ($user_role == 4 || $user_role == 5) {
 			// Pour les rôles 4 et 5 : prénom, nom, identifiant
@@ -152,7 +168,8 @@ class Utilisateurs extends MY_Controller
 			$data = [
 				'prenom' => $this->input->post('prenom'),
 				'nom' => $this->input->post('nom'),
-				'id_role' => $user_role
+				'id_role' => $user_role,
+				'actif' => ($actif !== null) ? (int)$actif : 1,
 			];
 			// Ne mettre à jour l'identifiant que si un nouveau est saisi
 			if (!empty($identifiant)) {
@@ -174,7 +191,8 @@ class Utilisateurs extends MY_Controller
 				'prenom' => $this->input->post('prenom'),
 				'nom' => $this->input->post('nom'),
 				'email' => $email,
-				'id_role' => $user_role
+				'id_role' => $user_role,
+				'actif' => ($actif !== null) ? (int)$actif : 1,
 			];
 			// Ne mettre à jour le mot de passe que si un nouveau est saisi
 			if (!empty($mot_de_passe)) {

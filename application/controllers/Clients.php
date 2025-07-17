@@ -89,6 +89,7 @@ class Clients extends MY_Controller {
 			show_error("Accès interdit à ce client.", 403);
 		}
 		$this->Client->deleteClientById($id);
+		redirect('clients');
 	}
 
 

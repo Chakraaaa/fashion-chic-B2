@@ -108,6 +108,7 @@
 					<div class="mb-3">
 						<label for="email" class="form-label">Email *</label>
 						<input type="email" class="form-control" id="email" name="email" required>
+						<small class="form-text text-muted">Un email automatique sera envoyé à cette adresse avec les identifiants de connexion.</small>
 						<div class="invalid-feedback"></div>
 					</div>
 

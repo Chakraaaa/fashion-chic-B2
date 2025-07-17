@@ -181,7 +181,7 @@
 
 		if (confirm("Voulez-vous vraiment supprimer ce client ?")) {
 			$.ajax({
-				url: siteUrl + 'clients/delete/' + clientId,
+				url: siteUrl + '/clients/delete/' + clientId,
 				type: 'POST',
 				success: function (response) {
 					location.reload();

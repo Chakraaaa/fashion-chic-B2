@@ -20,6 +20,11 @@ class Login extends MY_Controller {
 		$password = $this->input->post('mot_de_passe');
 		$user = $this->Utilisateur->getUserByEmail($email);
 		if ($user && password_verify($password, $user->mot_de_passe)) {
+			if (isset($user->actif) && !$user->actif) {
+				$data['error'] = "L’accès à votre compte a été bloqué.";
+				$this->loadView('login', $data, false);
+				return;
+			}
 			$role = $this->Role->getRoleByUserIdRole($user->id_role);
 			$user->role_nom = strtolower($role->libelle);
 			$this->session->set_userdata('user', $user);
@@ -36,6 +41,11 @@ class Login extends MY_Controller {
 		$identifiant = $this->input->post('identifiant');
 		$user = $this->Utilisateur->getUserByIdentifiant($identifiant);
 		if ($user) {
+			if (isset($user->actif) && !$user->actif) {
+				$data['error'] = "L’accès à votre compte a été bloqué.";
+				$this->loadView('login_identifiant', $data, false);
+				return;
+			}
 			$role = $this->Role->getRoleByUserIdRole($user->id_role);
 			$user->role_nom = strtolower($role->libelle);
 			$this->session->set_userdata('user', $user);

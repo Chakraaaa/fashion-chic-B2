@@ -152,7 +152,51 @@ class Stocks extends MY_Controller {
 		exit;
 	}
 
+    /**
+     * Affiche la pop-up d'édition d'un produit (AJAX)
+     */
+    public function load_edit_produit_popup()
+    {
+        $id = $this->input->get('id_produit');
+        if (!$id) {
+            show_error('ID produit manquant', 400);
+        }
+        $this->load->model('Produit');
+        $produit = $this->Produit->get_by_id($id);
+        if (!$produit) {
+            show_error('Produit introuvable', 404);
+        }
+        $data['produit'] = $produit;
+        $this->load->view('stocks/popup_edit_produit', $data);
+    }
 
+    /**
+     * Traite la soumission du formulaire d'édition de produit
+     */
+    public function edit_produit()
+    {
+        $id = $this->input->post('id_produit');
+        if (!$id) {
+            show_error('ID produit manquant', 400);
+        }
+        $this->load->model('Produit');
+        $data = [
+            'nom' => $this->input->post('nom'),
+            'reference' => $this->input->post('reference'),
+            'categorie' => $this->input->post('categorie'),
+            'genre' => $this->input->post('genre'),
+            'taille' => $this->input->post('taille'),
+            'couleur' => $this->input->post('couleur'),
+            'marque' => $this->input->post('marque'),
+            'prix_achat' => $this->input->post('prix_achat'),
+            'prix_vente' => $this->input->post('prix_vente'),
+            'quantite' => $this->input->post('quantite'),
+            'seuil_reappro' => $this->input->post('seuil_reappro'),
+        ];
+        $this->Produit->update($id, $data);
+        $this->session->set_flashdata('success', 'Produit modifié avec succès.');
+        redirect('stocks/admin');
+    }
 
 
 }
