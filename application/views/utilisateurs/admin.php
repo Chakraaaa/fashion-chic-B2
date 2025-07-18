@@ -1,4 +1,16 @@
 <style>
+	.search-container input {
+		border-radius: 8px;
+		padding: 10px 12px;
+		border: 1px solid #ccc;
+		transition: box-shadow 0.2s;
+	}
+
+	.search-container input:focus {
+		box-shadow: 0 0 5px rgba(186, 155, 97, 0.5);
+		border-color: #ba9b61;
+	}
+
 	body {
 		background: #F0E6D1;
 		font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
@@ -129,17 +141,27 @@
 
 <div class="container mt-4">
 	<div class="main-card">
-	<div class="d-flex justify-content-between align-items-center mb-4">
-		<h1 class="h4 fw-semibold">Liste des utilisateurs </h1>
-		<div class="d-flex gap-2">
-			<button class="btn btn-ajouter btn-ajouter-user" data-bs-toggle="modal" data-bs-target="#modalAjouterUtilisateur">
-				<i class="bi bi-person-plus-fill"></i> Ajouter un utilisateur
-			</button>
-			<button class="btn btn-ajouter btn-ajouter-user-identifiant" data-bs-toggle="modal" data-bs-target="#modalAjouterUtilisateurIdentifiant">
-				<i class="bi bi-person-badge-plus"></i> Ajouter un utilisateur avec identifiant
-			</button>
+		<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+			<h1 class="h4 fw-semibold mb-3 mb-md-0">Liste des utilisateurs</h1>
+
+			<div class="d-flex flex-column flex-md-row align-items-md-center gap-3 w-100 w-md-auto">
+				<!-- Barre de recherche -->
+				<div class="search-container flex-grow-1" style="max-width: 400px;">
+					<input type="text" id="search-user-input" class="form-control"
+						   placeholder="Rechercher un utilisateur par nom ou prénom...">
+				</div>
+
+				<!-- Boutons -->
+				<div class="d-flex gap-2 mt-3 mt-md-0">
+					<button class="btn btn-ajouter btn-ajouter-user" data-bs-toggle="modal" data-bs-target="#modalAjouterUtilisateur">
+						<i class="bi bi-person-plus-fill"></i> Ajouter un utilisateur
+					</button>
+					<button class="btn btn-ajouter btn-ajouter-user-identifiant" data-bs-toggle="modal" data-bs-target="#modalAjouterUtilisateurIdentifiant">
+						<i class="bi bi-person-badge-plus"></i> Ajouter un utilisateur avec identifiant
+					</button>
+				</div>
+			</div>
 		</div>
-	</div>
 
 	<table class="table table-bordered bg-white rounded shadow-sm">
 		<thead class="table-light">
@@ -296,5 +318,15 @@
 			});
 		}
 	});
+	// Recherche dynamique d'utilisateur (par nom ou prénom)
+	$('#search-user-input').on('keyup', function () {
+		const value = $(this).val().toLowerCase();
+		$('table tbody tr').filter(function () {
+			const prenom = $(this).find('td:eq(0)').text().toLowerCase();
+			const nom = $(this).find('td:eq(1)').text().toLowerCase();
+			$(this).toggle(prenom.includes(value) || nom.includes(value));
+		});
+	});
+
 </script>
 
