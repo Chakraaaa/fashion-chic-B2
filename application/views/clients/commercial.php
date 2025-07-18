@@ -169,14 +169,21 @@ $(document).ready(function () {
             success: function (data) {
                 $('#popup-add-client').remove();
                 $('body').append(data);
-                const popup = new bootstrap.Modal(document.getElementById('modalAjouterClient'), {
-                    backdrop: 'static',
-                    keyboard: false
-                });
-                popup.show();
-                $('#popup-add-client').on('hidden.bs.modal', function () {
-                    $(this).remove();
-                });
+                setTimeout(function() {
+                    var modalEl = document.getElementById('modalAjouterClient');
+                    if (modalEl) {
+                        const popup = new bootstrap.Modal(modalEl, {
+                            backdrop: 'static',
+                            keyboard: false
+                        });
+                        popup.show();
+                        $('#modalAjouterClient').on('hidden.bs.modal', function () {
+                            $(this).remove();
+                        });
+                    } else {
+                        alert("Erreur : la popup n'a pas été trouvée dans le DOM.");
+                    }
+                }, 10);
             },
             error: function () {
                 alert("Erreur lors du chargement de la pop-up.");

@@ -128,6 +128,13 @@
 								<?php endforeach; ?>
 							</select>
 						</div>
+
+						<div class="mb-3 form-check">
+							<input type="checkbox" class="form-check-input" id="desactiverCompte" name="actif" value="0" <?= (isset($utilisateur->actif) && !$utilisateur->actif) ? 'checked' : '' ?>>
+							<label class="form-check-label" for="desactiverCompte">
+								<span class="text-danger fw-bold">Désactiver le compte de l'utilisateur</span>
+							</label>
+						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -145,8 +152,48 @@
 
 <script>
 $(document).ready(function() {
+	function setInputsDisabled(disabled) {
+		$('#formModifierUtilisateur input, #formModifierUtilisateur select, #formModifierUtilisateur textarea').not('#desactiverCompte').prop('disabled', disabled);
+	}
+
+	// Initial grisé si déjà désactivé
+	if ($('#desactiverCompte').is(':checked')) {
+		setInputsDisabled(true);
+	}
+
+	$('#desactiverCompte').on('change', function() {
+		if ($(this).is(':checked')) {
+			if (confirm("Voulez-vous vraiment désactiver l'accès à ce compte ?")) {
+				setInputsDisabled(true);
+			} else {
+				$(this).prop('checked', false);
+			}
+		} else {
+			if (confirm("Êtes-vous sûr de vouloir réactiver ce compte ?")) {
+				setInputsDisabled(false);
+			} else {
+				$(this).prop('checked', true);
+			}
+		}
+	});
+
 	$('#formModifierUtilisateur').on('submit', function(e) {
 		e.preventDefault();
+		
+		// Réactiver temporairement tous les champs pour qu'ils soient envoyés
+		const wasDisabled = $('#desactiverCompte').is(':checked');
+		if (wasDisabled) {
+			setInputsDisabled(false);
+		}
+		
+		// Ajoute un input caché pour envoyer actif=1 si la case n'est pas cochée
+		if (!$('#desactiverCompte').is(':checked')) {
+			if ($('input[name="actif"]').length === 0) {
+				$(this).append('<input type="hidden" name="actif" value="1">');
+			} else {
+				$('input[name="actif"]').val('1');
+			}
+		}
 		
 		$.ajax({
 			url: $(this).attr('action'),
@@ -162,6 +209,12 @@ $(document).ready(function() {
 			},
 			error: function() {
 				alert('Erreur lors de la modification de l\'utilisateur');
+			},
+			complete: function() {
+				// Regriser les champs si nécessaire après la requête
+				if (wasDisabled) {
+					setInputsDisabled(true);
+				}
 			}
 		});
 	});

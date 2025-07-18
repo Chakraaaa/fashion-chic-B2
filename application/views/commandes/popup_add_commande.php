@@ -1,3 +1,6 @@
+<?php
+?>
+
 <style>
     .modal-content {
 		border: none;
@@ -83,12 +86,19 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="id_commercial" class="form-label">Commercial *</label>
-                            <select class="form-select" id="id_commercial" name="id_commercial" required>
-                                <option value="">Sélectionner un commercial</option>
-                                <?php foreach ($commerciaux as $commercial): ?>
-                                    <option value="<?= $commercial->id_utilisateur ?>"> <?= htmlspecialchars($commercial->prenom . ' ' . $commercial->nom) ?> </option>
-                                <?php endforeach; ?>
-                            </select>
+                            <?php if ($role === 'commercial'): ?>
+                                <!-- Pour les commerciaux : champ grisé avec leurs infos -->
+                                <input type="hidden" name="id_commercial" value="<?= $user->id_utilisateur ?>">
+                                <input type="text" class="form-control" value="<?= htmlspecialchars($user->prenom . ' ' . $user->nom) ?>" disabled>
+                            <?php else: ?>
+                                <!-- Pour les admins : select avec tous les commerciaux -->
+                                <select class="form-select" id="id_commercial" name="id_commercial" required>
+                                    <option value="">Sélectionner un commercial</option>
+                                    <?php foreach ($commerciaux as $commercial): ?>
+                                        <option value="<?= $commercial->id_utilisateur ?>"> <?= htmlspecialchars($commercial->prenom . ' ' . $commercial->nom) ?> </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            <?php endif; ?>
                         </div>
                         <div class="col-md-6">
                             <label for="statut" class="form-label">Statut *</label>

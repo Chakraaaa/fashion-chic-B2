@@ -195,7 +195,7 @@ class Stocks extends MY_Controller {
         ];
         $this->Produit->update($id, $data);
         $this->session->set_flashdata('success', 'Produit modifié avec succès.');
-        redirect('stocks/admin');
+        redirect('stocks');
     }
 
 

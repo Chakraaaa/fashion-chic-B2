@@ -206,5 +206,16 @@ class Commande extends CI_Model {
 		]);
 	}
 
+	public function getCommandeById($id_commande)
+	{
+		$this->db->select('c.*, cl.nom as nom_client, u.nom as nom_commercial');
+		$this->db->from('COMMANDE c');
+		$this->db->join('CLIENT cl', 'cl.id_client = c.id_client');
+		$this->db->join('UTILISATEUR u', 'u.id_utilisateur = c.id_commercial');
+		$this->db->where('c.id_commande', $id_commande);
+		$query = $this->db->get();
+		return $query->row();
+	}
+
 
 }

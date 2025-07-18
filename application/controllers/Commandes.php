@@ -207,11 +207,20 @@ class Commandes extends MY_Controller {
 	{
 		$user = $this->session->userdata('user');
 		$role = $this->Role->getRoleByUserIdRole($user->id_role);
+		
+		$data['user'] = $user;
+		$data['role'] = $role;
 		$data['clients'] = ($role === 'commercial') ? $this->Client->getClientsByCommercialId($user->id_utilisateur) : $this->Client->getAllClients();
 		$data['commerciaux'] = ($role === 'commercial') ? [] : $this->Utilisateur->getCommerciaux();
 		$data['lots'] = $this->Lot->getAllLots();
-		$data['preparateurs'] = $this->Utilisateur->getUsersByIdRole(6); // 6 = préparateur
-		$data['envoyeurs'] = $this->Utilisateur->getUsersByIdRole(7); // 7 = envoyeur
+		
+		// Récupérer les IDs de rôle pour préparateur et envoyeur
+		$idRolePreparateur = $this->Role->getIdByRoleName('preparateur');
+		$idRoleEnvoyeur = $this->Role->getIdByRoleName('envoyeur');
+		
+		$data['preparateurs'] = $idRolePreparateur ? $this->Utilisateur->getUsersByIdRole($idRolePreparateur) : [];
+		$data['envoyeurs'] = $idRoleEnvoyeur ? $this->Utilisateur->getUsersByIdRole($idRoleEnvoyeur) : [];
+		
 		$this->load->view('commandes/popup_add_commande', $data);
 	}
 
@@ -231,8 +240,13 @@ class Commandes extends MY_Controller {
 		$data['clients'] = $this->Client->getAllClients();
 		$data['commerciaux'] = $this->Utilisateur->getCommerciaux();
 		$data['lots'] = $this->Lot->getAllLots();
-		$data['preparateurs'] = $this->Utilisateur->getUsersByIdRole(6); // 6 = préparateur
-		$data['envoyeurs'] = $this->Utilisateur->getUsersByIdRole(7); // 7 = envoyeur
+		
+		// Récupérer les IDs de rôle pour préparateur et envoyeur
+		$idRolePreparateur = $this->Role->getIdByRoleName('preparateur');
+		$idRoleEnvoyeur = $this->Role->getIdByRoleName('envoyeur');
+		
+		$data['preparateurs'] = $idRolePreparateur ? $this->Utilisateur->getUsersByIdRole($idRolePreparateur) : [];
+		$data['envoyeurs'] = $idRoleEnvoyeur ? $this->Utilisateur->getUsersByIdRole($idRoleEnvoyeur) : [];
 		
 		$this->load->view('commandes/popup_edit_commande', $data);
 	}
