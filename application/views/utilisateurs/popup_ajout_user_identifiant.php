@@ -5,15 +5,19 @@
         border: none;
         background: #fff;
     }
-    .modal-header {
-		background-color: #ba9b61 !important;
-        color: #fff;
-        border-radius: 16px 16px 0 0;
-        border-bottom: none;
-    }
+	.modal-header {
+		border-radius: 16px 16px 0 0;
+		background: #f6f7fb;
+		border-bottom: 1px solid #e3e6f0;
+		background: linear-gradient(90deg, #ba9b61 0%, #E4D0AA 100%) !important;
+
+	}
     .modal-title {
         font-weight: 600;
         letter-spacing: 0.5px;
+		text-align: center;
+		width: 100%;
+		margin: 0 auto;
     }
     .form-label {
         color: #2d3651;
@@ -38,11 +42,11 @@
         box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
         transition: background 0.2s, box-shadow 0.2s;
     }
-    .btn-primary:hover {
-        background: linear-gradient(90deg, #667eea 0%, #2d3651 100%);
-        color: #fff;
-        box-shadow: 0 4px 16px rgba(44, 62, 80, 0.12);
-    }
+	.btn-primary:hover {
+		background-color: #c5c1b7;
+		color: black;
+		box-shadow: 0 4px 16px rgba(44, 62, 80, 0.12);
+	}
     .btn-secondary {
         border-radius: 8px;
         background: #f6f7fb;

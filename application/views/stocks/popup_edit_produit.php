@@ -1,3 +1,83 @@
+<style>
+	.modal-content {
+		border-radius: 16px;
+		box-shadow: 10px 10px #E4D0AA;
+		border: none;
+		background: #fff;
+	}
+	.modal-header {
+		border-radius: 16px 16px 0 0;
+		background: #f6f7fb;
+		border-bottom: 1px solid #e3e6f0;
+		background: linear-gradient(90deg, #ba9b61 0%, #E4D0AA 100%) !important;
+
+	}
+	.modal-title {
+		font-weight: 600;
+		letter-spacing: 0.5px;
+		text-align: center;
+		width: 100%;
+		margin: 0 auto;
+	}
+	.form-label {
+		color: #2d3651;
+		font-weight: 500;
+	}
+	.form-control, .form-select {
+		border-radius: 8px;
+		border: 1.5px solid #e3e6f0;
+		box-shadow: none;
+		transition: border-color 0.2s;
+	}
+	.form-control:focus, .form-select:focus {
+		border-color: #ba9b61;
+		box-shadow: 0 0 0 2px #ba9b61;
+	}
+	.btn-primary, .btn-primary:focus {
+		background-color: #ba9b61 !important;
+		border: none;
+		color: #fff;
+		font-weight: 500;
+		border-radius: 8px;
+		box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+		transition: background 0.2s, box-shadow 0.2s;
+	}
+	.btn-primary:hover {
+		background-color: #c5c1b7;
+		color: black;
+		box-shadow: 0 4px 16px rgba(44, 62, 80, 0.12);
+	}
+	.btn-secondary {
+		border-radius: 8px;
+		background: #f6f7fb;
+		color: #2d3651;
+		border: none;
+		font-weight: 500;
+		transition: background 0.2s, color 0.2s;
+	}
+	.btn-secondary:hover {
+		background: #e9edfa;
+		color: #2d3651;
+	}
+	.modal-footer {
+		border-top: none;
+		border-radius: 0 0 16px 16px;
+		background: #fff;
+	}
+	.form-text.text-muted {
+		color: #7b8190 !important;
+	}
+	@media (max-width: 768px) {
+		.modal-dialog {
+			max-width: 98vw;
+			margin: 1.2rem auto;
+		}
+		.modal-content {
+			padding: 0 2px;
+		}
+	}
+</style>
+
 <div class="modal fade" id="popupEditProduit" tabindex="-1" aria-labelledby="popupEditProduitLabel" aria-hidden="true">
     <div class="modal-dialog">
         <form method="post" action="<?= site_url('stocks/edit_produit') ?>">

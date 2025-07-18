@@ -108,7 +108,7 @@ if (!function_exists('getUserNameById')) {
 		<div class="d-flex justify-content-between align-items-center mb-4">
 			<h1 class="h4 fw-semibold">Liste des commandes</h1>
 			<button class="btn btn-ajouter btn-ajouter-commande" data-bs-toggle="modal" data-bs-target="#modalAjouterCommande">
-				<i class="bi bi-plus-circle"></i> Ajouter une commande
+				<i class="fas fa-plus me-1"></i> Ajouter une commande
 			</button>
 		</div>
 
@@ -145,8 +145,9 @@ if (!function_exists('getUserNameById')) {
 			<input class="form-check-input" type="checkbox" name="filtre_non_attribue" id="filtre_non_attribue" value="1" <?= isset($_GET['filtre_non_attribue']) ? 'checked' : '' ?>>
 			<label class="form-check-label" for="filtre_non_attribue">Non attribuées</label>
 		</div>
-		<button type="submit" class="btn btn-outline-primary ms-2">Filtrer</button>
-		<a href="<?= site_url('commandes') ?>" class="btn btn-outline-secondary ms-2">Réinitialiser</a>
+		<button type="submit" class="btn btn-ajouter ms-2">Filtrer</button>
+		<a href="<?= site_url('commandes') ?>" class="btn btn-ajouter ms-2">Réinitialiser</a>
+
 	</form>
 
 	<table class="table table-bordered bg-white rounded shadow-sm">

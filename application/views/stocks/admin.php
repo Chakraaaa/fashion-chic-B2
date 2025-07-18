@@ -1,12 +1,12 @@
 <style>
     body {
-        background: #f6f7fb;
+        background: #F0E6D1;
         font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
     }
     .main-card {
         background: #fff;
         border-radius: 18px;
-        box-shadow: 0 4px 24px rgba(44, 62, 80, 0.08);
+		box-shadow: 10px 10px #E4D0AA;
         padding: 32px 28px 24px 28px;
         margin-bottom: 32px;
     }
@@ -14,8 +14,11 @@
         color: #2d3651;
         letter-spacing: 0.5px;
     }
+	.h4{
+		font-size: 35px;
+	}
     .btn-primary, .btn-primary:focus {
-        background: linear-gradient(90deg, #2d3651 0%, #667eea 100%);
+		background-color: #ba9b61 !important;
         border: none;
         color: #fff;
         font-weight: 500;
@@ -24,8 +27,8 @@
         transition: background 0.2s, box-shadow 0.2s;
     }
     .btn-primary:hover {
-        background: linear-gradient(90deg, #667eea 0%, #2d3651 100%);
-        color: #fff;
+		background-color: #c5c1b7;
+		color: black;
         box-shadow: 0 4px 16px rgba(44, 62, 80, 0.12);
     }
     .btn-danger {
@@ -38,7 +41,7 @@
         background: #fff;
     }
     .table thead th {
-        background: linear-gradient(90deg, #667eea 0%, #2d3651 100%);
+		background-color: #ba9b61;
         color: #fff;
         font-weight: 600;
         border: none;
@@ -96,7 +99,7 @@
     .table tbody tr:hover {
         background: #f0f4ff;
         box-shadow: 0 2px 12px rgba(102, 126, 234, 0.10);
-        border-left: 4px solid #667eea;
+		border-left: 4px solid #ba9b61;
     }
     .table tbody tr {
         border-bottom: 1.5px solid #e3e6f0;
@@ -128,9 +131,14 @@
 
 <div class="container mt-4">
 	<div class="main-card">
-		<div class="d-flex justify-content-between align-items-center mb-3">
-			<h1 class="h4 fw-semibold">Liste des stocks</h1>
-			<div class="d-flex gap-2">
+		<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+			<h1 class="h4 fw-semibold mb-2 mb-md-0">Liste des stocks</h1>
+
+			<div class="d-flex flex-grow-1 justify-content-center order-2 order-md-1 mb-2 mb-md-0">
+				<input type="text" id="search-input" class="form-control" placeholder="Rechercher un produit par nom ou référence..." style="max-width: 400px;">
+			</div>
+
+			<div class="d-flex gap-2 order-1 order-md-2">
 				<button class="btn btn-primary" id="btn-import-stocks">
 					<i class="fas fa-plus me-1"></i> Importer des stocks
 				</button>
@@ -249,6 +257,15 @@
 <div id="popup-edit-produit" style="display: none;"></div>
 
 <script>
+	// Recherche en direct dans le tableau
+	$('#search-input').on('keyup', function () {
+		const value = $(this).val().toLowerCase();
+		$('table tbody tr').filter(function () {
+			const nom = $(this).find('td:eq(0)').text().toLowerCase();
+			const reference = $(this).find('td:eq(1)').text().toLowerCase();
+			$(this).toggle(nom.includes(value) || reference.includes(value));
+		});
+	})
 	$(document).ready(function () {
 		$('#btn-import-stocks').on('click', function (e) {
 			e.preventDefault();
