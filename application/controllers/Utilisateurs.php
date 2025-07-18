@@ -66,12 +66,22 @@ class Utilisateurs extends MY_Controller
 		];
 
 		$this->Utilisateur->addUser($data);
-		$this->session->set_flashdata('success', 'Utilisateur ajouté avec succès');
-		redirect('utilisateurs');
-
 		// Envoi de l'email de bienvenue avec les identifiants
 		$this->load->library('email');
-		$this->email->from('no-reply@fashion-chic.com', 'FASHION CHIC');
+
+		// Configuration SMTP pour Gmail
+		$config = array(
+			'protocol'  => 'smtp',
+			'smtp_host' => 'ssl://smtp.gmail.com',
+			'smtp_port' => 465,
+			'smtp_user' => 'fashionchicnoreply@gmail.com', // Remplace par ton adresse Gmail
+			'smtp_pass' => 'zrsk cydu ofcs agis',   // Remplace par ton mot de passe ou mot de passe d'application
+			'mailtype'  => 'text',
+			'charset'   => 'utf-8',
+			'newline'   => "\r\n"
+		);
+		$this->email->initialize($config);
+		$this->email->from('fashionchicnoreply@gmail.com', 'FASHION CHIC');
 		$this->email->to($email);
 		$this->email->subject('Votre compte FASHION CHIC');
 		$prenom = $this->input->post('prenom');
@@ -79,12 +89,17 @@ class Utilisateurs extends MY_Controller
 		$mot_de_passe = $this->input->post('mot_de_passe');
 		$message = "Bonjour $prenom $nom,\n\nVotre compte a été créé.\nEmail de connexion : $email\nMot de passe : $mot_de_passe\n\nCordialement,\nFASHION CHIC";
 		$this->email->message($message);
-		$this->email->send();
+
+		// Debug en direct
+		$result = $this->email->send();
+		var_dump('Résultat envoi mail :', $result);
+		echo $this->email->print_debugger();
+		// $this->session->set_flashdata('success', 'Utilisateur ajouté avec succès');
+		// redirect('utilisateurs');
 	}
 
 	public function saveNewUserIdentifiant()
 	{
-		var_dump($this->input->post('prenom'));
 		$this->load->model('Utilisateur');
 
 		// Générer un identifiant unique automatiquement
@@ -122,14 +137,14 @@ class Utilisateurs extends MY_Controller
 	{
 		$user_id = $this->input->get('user_id');
 		$user_role = $this->input->get('user_role');
-		
+
 		// Récupérer les données de l'utilisateur
 		$utilisateur = $this->Utilisateur->getUserById($user_id);
 		$roles = $this->Role->getAllRoles();
-		
+
 		$data['utilisateur'] = $utilisateur;
 		$data['roles'] = $roles;
-		
+
 		// Choisir la vue selon le rôle
 		if ($user_role == 4 || $user_role == 5) {
 			$this->load->view('utilisateurs/popup_edit_user_roles_4_5', $data);
@@ -142,14 +157,14 @@ class Utilisateurs extends MY_Controller
 	{
 		$user_id = $this->input->post('id_utilisateur');
 		$user_role = $this->input->post('id_role');
-		
+
 		// Validation des données
 		if (empty($user_id) || empty($user_role)) {
 			header('Content-Type: application/json');
 			echo json_encode(['success' => false, 'message' => 'Données manquantes']);
 			return;
 		}
-		
+
 		// Ajout de la gestion du champ 'actif'
 		$actif = $this->input->post('actif');
 
@@ -157,14 +172,14 @@ class Utilisateurs extends MY_Controller
 		if ($user_role == 4 || $user_role == 5) {
 			// Pour les rôles 4 et 5 : prénom, nom, identifiant
 			$identifiant = $this->input->post('identifiant');
-			
+
 			// Vérifier si l'identifiant existe déjà (sauf pour cet utilisateur)
 			if ($this->Utilisateur->identifiantExists($identifiant, $user_id)) {
 				header('Content-Type: application/json');
 				echo json_encode(['success' => false, 'message' => 'Cet identifiant existe déjà']);
 				return;
 			}
-			
+
 			$data = [
 				'prenom' => $this->input->post('prenom'),
 				'nom' => $this->input->post('nom'),
@@ -179,14 +194,14 @@ class Utilisateurs extends MY_Controller
 			// Pour les rôles 1, 2, 3 : prénom, nom, email, mot de passe
 			$email = $this->input->post('email');
 			$mot_de_passe = $this->input->post('mot_de_passe');
-			
+
 			// Vérifier si l'email existe déjà (sauf pour cet utilisateur)
 			if ($this->Utilisateur->emailExists($email, $user_id)) {
 				header('Content-Type: application/json');
 				echo json_encode(['success' => false, 'message' => 'Cet email existe déjà']);
 				return;
 			}
-			
+
 			$data = [
 				'prenom' => $this->input->post('prenom'),
 				'nom' => $this->input->post('nom'),
@@ -199,9 +214,9 @@ class Utilisateurs extends MY_Controller
 				$data['mot_de_passe'] = password_hash($mot_de_passe, PASSWORD_DEFAULT);
 			}
 		}
-		
+
 		$result = $this->Utilisateur->updateUser($user_id, $data);
-		
+
 		// Retourner une réponse JSON
 		header('Content-Type: application/json');
 		if ($result) {
