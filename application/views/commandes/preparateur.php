@@ -1,12 +1,12 @@
 <style>
     body {
-        background: #f6f7fb;
+		background: #F0E6D1;
         font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
     }
     .main-card {
         background: #fff;
         border-radius: 18px;
-        box-shadow: 0 4px 24px rgba(44, 62, 80, 0.08);
+		box-shadow: 10px 10px #E4D0AA;
         padding: 32px 28px 24px 28px;
         margin-bottom: 32px;
     }
@@ -14,8 +14,11 @@
         color: #2d3651;
         letter-spacing: 0.5px;
     }
+	.h4{
+		font-size: 35px;
+	}
     .btn-primary, .btn-primary:focus {
-        background: linear-gradient(90deg, #2d3651 0%, #667eea 100%);
+		background-color: #ba9b61 !important;
         border: none;
         color: #fff;
         font-weight: 500;
@@ -24,8 +27,8 @@
         transition: background 0.2s, box-shadow 0.2s;
     }
     .btn-primary:hover {
-        background: linear-gradient(90deg, #667eea 0%, #2d3651 100%);
-        color: #fff;
+		background-color: #c5c1b7;
+		color: black;
         box-shadow: 0 4px 16px rgba(44, 62, 80, 0.12);
     }
     .btn-info {
@@ -95,7 +98,7 @@
         background: #fff;
     }
     .table thead th {
-        background: linear-gradient(90deg, #667eea 0%, #2d3651 100%);
+		background-color: #ba9b61;
         color: #fff;
         font-weight: 600;
         border: none;
