@@ -10,7 +10,7 @@ class Lot extends CI_Model {
 
 	public function getAllLots() {
 		$this->db->select('id_lot, nom, date_creation');
-		$this->db->from('LOT');
+		$this->db->from('lot');
 		$this->db->order_by('date_creation', 'DESC');
 
 		$query = $this->db->get();
@@ -20,8 +20,8 @@ class Lot extends CI_Model {
 	public function getContenuLot($id_lot)
 	{
 		$this->db->select('p.reference, p.nom, p.categorie, p.genre, p.taille, p.couleur, p.marque, p.prix_vente, cl.quantite');
-		$this->db->from('CONTENU_LOT cl');
-		$this->db->join('PRODUIT p', 'cl.id_produit = p.id_produit');
+		$this->db->from('contenu_lot cl');
+		$this->db->join('produit p', 'cl.id_produit = p.id_produit');
 		$this->db->where('cl.id_lot', $id_lot);
 
 		$query = $this->db->get();
@@ -30,7 +30,7 @@ class Lot extends CI_Model {
 
 	public function addLot($data)
 	{
-		$this->db->insert('LOT', $data);
+		$this->db->insert('lot', $data);
 		if ($this->db->affected_rows() > 0) {
 			return $this->db->insert_id();
 		}
@@ -45,7 +45,7 @@ class Lot extends CI_Model {
 			'quantite' => $quantite
 		];
 
-		return $this->db->insert('CONTENU_LOT', $data);
+		return $this->db->insert('contenu_lot', $data);
 	}
 
 	public function saveNewLot($produits)
@@ -71,7 +71,7 @@ class Lot extends CI_Model {
 	public function getLotById($id_lot)
 	{
 		$this->db->select('id_lot, nom, date_creation');
-		$this->db->from('LOT');
+		$this->db->from('lot');
 		$this->db->where('id_lot', $id_lot);
 		
 		$query = $this->db->get();
@@ -85,11 +85,11 @@ class Lot extends CI_Model {
 
 		// Supprimer le contenu du lot
 		$this->db->where('id_lot', $id_lot);
-		$this->db->delete('CONTENU_LOT');
+		$this->db->delete('contenu_lot');
 
 		// Supprimer le lot
 		$this->db->where('id_lot', $id_lot);
-		$this->db->delete('LOT');
+		$this->db->delete('lot');
 
 		// Terminer la transaction
 		$this->db->trans_complete();
@@ -100,8 +100,8 @@ class Lot extends CI_Model {
 	public function getLotsByCommande($id_commande)
 	{
 		$this->db->select('cl.id_lot, l.nom, SUM(cl.quantite) as quantite');
-		$this->db->from('COMMANDE_LOT cl');
-		$this->db->join('LOT l', 'cl.id_lot = l.id_lot');
+		$this->db->from('commande_lot cl');
+		$this->db->join('lot l', 'cl.id_lot = l.id_lot');
 		$this->db->where('cl.id_commande', $id_commande);
 		$this->db->group_by(['cl.id_lot', 'l.nom']);
 		$query = $this->db->get();
