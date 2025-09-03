@@ -10,9 +10,9 @@ class Commande extends CI_Model {
 	public function getAllCommandes()
 	{
 		$this->db->select('c.*, cl.nom as nom_client, u.nom as nom_commercial');
-		$this->db->from('commande c');
-		$this->db->join('client cl', 'cl.id_client = c.id_client');
-		$this->db->join('utilisateur u', 'u.id_utilisateur = c.id_commercial');
+		$this->db->from('COMMANDE c');
+		$this->db->join('CLIENT cl', 'cl.id_client = c.id_client');
+		$this->db->join('UTILISATEUR u', 'u.id_utilisateur = c.id_commercial');
 		return $this->db->get()->result();
 	}
 
@@ -20,9 +20,9 @@ class Commande extends CI_Model {
 	public function getCommandes($filters = [])
 	{
 		$this->db->select('c.*, cl.nom as nom_client, u.nom as nom_commercial');
-		$this->db->from('commande c');
-		$this->db->join('client cl', 'cl.id_client = c.id_client');
-		$this->db->join('utilisateur u', 'u.id_utilisateur = c.id_commercial', 'left');
+		$this->db->from('COMMANDE c');
+		$this->db->join('CLIENT cl', 'cl.id_client = c.id_client');
+		$this->db->join('UTILISATEUR u', 'u.id_utilisateur = c.id_commercial', 'left');
 
 		if (!empty($filters['id_preparateur'])) {
 			$this->db->where('c.id_preparateur', $filters['id_preparateur']);
@@ -56,28 +56,28 @@ class Commande extends CI_Model {
 	public function assignerPreparateur($id_commande, $id_preparateur)
 	{
 		$this->db->where('id_commande', $id_commande);
-		return $this->db->update('commande', ['id_preparateur' => $id_preparateur]);
+		return $this->db->update('COMMANDE', ['id_preparateur' => $id_preparateur]);
 	}
 
 	// Attribuer un envoyeur à une commande
 	public function assignerEnvoyeur($id_commande, $id_envoyeur)
 	{
 		$this->db->where('id_commande', $id_commande);
-		return $this->db->update('commande', ['id_envoyeur' => $id_envoyeur]);
+		return $this->db->update('COMMANDE', ['id_envoyeur' => $id_envoyeur]);
 	}
 
 	// Modifier la priorité d'une commande
 	public function setPriority($id_commande, $priority_level)
 	{
 		$this->db->where('id_commande', $id_commande);
-		return $this->db->update('commande', ['priority_level' => $priority_level]);
+		return $this->db->update('COMMANDE', ['priority_level' => $priority_level]);
 	}
 
 	// Modifier le commentaire d'une commande
 	public function setCommentaire($id_commande, $commentaire)
 	{
 		$this->db->where('id_commande', $id_commande);
-		return $this->db->update('commande', ['commentaire' => $commentaire]);
+		return $this->db->update('COMMANDE', ['commentaire' => $commentaire]);
 	}
 
 	// Modifier le statut d'une commande
@@ -86,7 +86,7 @@ class Commande extends CI_Model {
 		$commande = $this->getCommandes(['id_commande' => $id_commande]);
 		$ancien_statut = $commande && isset($commande[0]->statut) ? $commande[0]->statut : null;
 		$this->db->where('id_commande', $id_commande);
-		$this->db->update('commande', ['statut' => $statut]);
+		$this->db->update('COMMANDE', ['statut' => $statut]);
 		// Log selon le rôle
 		$user = $this->session->userdata('user');
 		$role = isset($user->id_role) ? $user->id_role : null;
@@ -102,16 +102,16 @@ class Commande extends CI_Model {
 	public function setLienSuivi($id_commande, $lien)
 	{
 		$this->db->where('id_commande', $id_commande);
-		return $this->db->update('commande', ['lien_suivi' => $lien]);
+		return $this->db->update('COMMANDE', ['lien_suivi' => $lien]);
 	}
 
 	// Récupérer les commandes non attribuées à un préparateur ou envoyeur
 	public function getCommandesNonAttribuees()
 	{
 		$this->db->select('c.*, cl.nom as nom_client, u.nom as nom_commercial');
-		$this->db->from('commande c');
-		$this->db->join('client cl', 'cl.id_client = c.id_client');
-		$this->db->join('utilisateur u', 'u.id_utilisateur = c.id_commercial', 'left');
+		$this->db->from('COMMANDE c');
+		$this->db->join('CLIENT cl', 'cl.id_client = c.id_client');
+		$this->db->join('UTILISATEUR u', 'u.id_utilisateur = c.id_commercial', 'left');
 		$this->db->where('(c.id_preparateur IS NULL OR c.id_envoyeur IS NULL)');
 		$this->db->order_by('c.priority_level', 'DESC');
 		$this->db->order_by('c.date_commande', 'DESC');
@@ -130,12 +130,12 @@ class Commande extends CI_Model {
 	{
 		$this->db->trans_start();
 		$data['numero_commande'] = $this->genererNumeroCommande();
-		$this->db->insert('commande', $data);
+		$this->db->insert('COMMANDE', $data);
 		$id_commande = $this->db->insert_id();
 
 		// Ajout des lots associés
 		foreach ($lots as $lot) {
-			$this->db->insert('commande_lot', [
+			$this->db->insert('COMMANDE_LOT', [
 				'id_commande' => $id_commande,
 				'id_lot' => $lot['id_lot'],
 				'quantite' => $lot['quantite']
@@ -150,15 +150,15 @@ class Commande extends CI_Model {
 	{
 		$this->db->trans_start();
 		$this->db->where('id_commande', $id_commande);
-		$this->db->update('commande', $data);
+		$this->db->update('COMMANDE', $data);
 
 		// Suppression des lots existants
 		$this->db->where('id_commande', $id_commande);
-		$this->db->delete('commande_lot');
+		$this->db->delete('COMMANDE_LOT');
 
 		// Ajout des nouveaux lots
 		foreach ($lots as $lot) {
-			$this->db->insert('commande_lot', [
+			$this->db->insert('COMMANDE_LOT', [
 				'id_commande' => $id_commande,
 				'id_lot' => $lot['id_lot'],
 				'quantite' => $lot['quantite']
@@ -171,8 +171,8 @@ class Commande extends CI_Model {
 	public function getLotsByCommande($id_commande)
 	{
 		$this->db->select('cl.*, l.date_creation');
-		$this->db->from('commande_lot cl');
-		$this->db->join('lot l', 'l.id_lot = cl.id_lot');
+		$this->db->from('COMMANDE_LOT cl');
+		$this->db->join('LOT l', 'l.id_lot = cl.id_lot');
 		$this->db->where('cl.id_commande', $id_commande);
 		return $this->db->get()->result();
 	}
@@ -182,16 +182,16 @@ class Commande extends CI_Model {
 	{
 		$this->db->trans_start();
 		$this->db->where('id_commande', $id_commande);
-		$this->db->delete('commande_lot');
+		$this->db->delete('COMMANDE_LOT');
 		$this->db->where('id_commande', $id_commande);
-		$this->db->delete('commande');
+		$this->db->delete('COMMANDE');
 		$this->db->trans_complete();
 	}
 
 	public function deleteClientById($id)
 	{
 		$this->db->where('id_client', $id);
-		$this->db->delete('client');
+		$this->db->delete('CLIENT');
 	}
 
 	private function logPreparateur($id_preparateur, $id_commande, $action, $ancien_statut, $nouveau_statut)
@@ -219,9 +219,9 @@ class Commande extends CI_Model {
 	public function getCommandeById($id_commande)
 	{
 		$this->db->select('c.*, cl.nom as nom_client, u.nom as nom_commercial');
-		$this->db->from('commande c');
-		$this->db->join('client cl', 'cl.id_client = c.id_client');
-		$this->db->join('utilisateur u', 'u.id_utilisateur = c.id_commercial');
+		$this->db->from('COMMANDE c');
+		$this->db->join('CLIENT cl', 'cl.id_client = c.id_client');
+		$this->db->join('UTILISATEUR u', 'u.id_utilisateur = c.id_commercial');
 		$this->db->where('c.id_commande', $id_commande);
 		$query = $this->db->get();
 		return $query->row();
