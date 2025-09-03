@@ -112,11 +112,10 @@ if (!function_exists('getUserNameById')) {
 			</button>
 		</div>
 
-	<!-- Filtres -->
-	<form method="get" class="mb-3 d-flex gap-2 align-items-end">
+	<div class="mb-3 d-flex gap-2 align-items-end">
 		<div>
 			<label class="form-label mb-0">Préparateur</label>
-			<select name="filtre_preparateur" class="form-select">
+			<select id="filtre_preparateur" name="filtre_preparateur" class="form-select">
 				<option value="">Tous</option>
 				<?php foreach ($preparateurs as $prep): ?>
 					<option value="<?= $prep->id_utilisateur ?>" <?= isset($_GET['filtre_preparateur']) && $_GET['filtre_preparateur'] == $prep->id_utilisateur ? 'selected' : '' ?>><?= htmlspecialchars($prep->prenom . ' ' . $prep->nom) ?></option>
@@ -125,7 +124,7 @@ if (!function_exists('getUserNameById')) {
 		</div>
 		<div>
 			<label class="form-label mb-0">Envoyeur</label>
-			<select name="filtre_envoyeur" class="form-select">
+			<select id="filtre_envoyeur" name="filtre_envoyeur" class="form-select">
 				<option value="">Tous</option>
 				<?php foreach ($envoyeurs as $env): ?>
 					<option value="<?= $env->id_utilisateur ?>" <?= isset($_GET['filtre_envoyeur']) && $_GET['filtre_envoyeur'] == $env->id_utilisateur ? 'selected' : '' ?>><?= htmlspecialchars($env->prenom . ' ' . $env->nom) ?></option>
@@ -134,21 +133,17 @@ if (!function_exists('getUserNameById')) {
 		</div>
 		<div>
 			<label class="form-label mb-0">Priorité</label>
-			<select name="filtre_priorite" class="form-select">
+			<select id="filtre_priorite" name="filtre_priorite" class="form-select">
 				<option value="">Toutes</option>
 				<?php for ($i = 10; $i >= 1; $i--): ?>
 					<option value="<?= $i ?>" <?= isset($_GET['filtre_priorite']) && $_GET['filtre_priorite'] == $i ? 'selected' : '' ?>><?= $i ?></option>
 				<?php endfor; ?>
 			</select>
 		</div>
-		<div class="form-check mb-0 ms-2">
-			<input class="form-check-input" type="checkbox" name="filtre_non_attribue" id="filtre_non_attribue" value="1" <?= isset($_GET['filtre_non_attribue']) ? 'checked' : '' ?>>
-			<label class="form-check-label" for="filtre_non_attribue">Non attribuées</label>
+		<div>
+			<button type="button" id="btn-reset-filtres" class="btn btn-secondary">Réinitialiser</button>
 		</div>
-		<button type="submit" class="btn btn-ajouter ms-2">Filtrer</button>
-		<a href="<?= site_url('commandes') ?>" class="btn btn-ajouter ms-2">Réinitialiser</a>
-
-	</form>
+	</div>
 
 	<table class="table table-bordered bg-white rounded shadow-sm">
 		<thead class="table-light">
@@ -226,6 +221,7 @@ if (!function_exists('getUserNameById')) {
 
 <div id="popup-add-commande" style="display: none;"></div>
 <div id="popup-edit-commande" style="display: none;"></div>
+<div id="popup-contenu-commande" style="display: none;"></div>
 
 <script>
 
@@ -291,6 +287,52 @@ $(document).ready(function () {
 			});
 		}
 	});
+
+	$(document).on('click', '.btn-view-contenu-commande', function () {
+		const commandeId = $(this).data('id');
+		$.ajax({
+			url: siteUrl + '/commandes/load_contenu_commande/' + commandeId,
+			method: 'GET',
+			success: function (data) {
+				$('#popup-contenu-commande').remove();
+				$('body').append(data);
+				const popup = new bootstrap.Modal(document.getElementById('popupContenuCommande'), {
+					backdrop: 'static',
+					keyboard: false
+				});
+				popup.show();
+				$('#popup-contenu-commande').on('hidden.bs.modal', function () {
+					$(this).remove();
+				});
+			},
+			error: function () {
+				alert("Erreur lors du chargement du contenu de la commande.");
+			}
+		});
+	});
 });
 
+</script>
+
+<script>
+$(function(){
+	function applyFilters() {
+		const prep = $('#filtre_preparateur').val() || '';
+		const env  = $('#filtre_envoyeur').val() || '';
+		const prio = $('#filtre_priorite').val() || '';
+		const params = new URLSearchParams();
+		if (prep) params.set('filtre_preparateur', prep);
+		if (env)  params.set('filtre_envoyeur', env);
+		if (prio) params.set('filtre_priorite', prio);
+		const base = siteUrl + '/commandes';
+		window.location = params.toString() ? (base + '?' + params.toString()) : base;
+	}
+	$('#filtre_preparateur, #filtre_envoyeur, #filtre_priorite').on('change', applyFilters);
+	$('#btn-reset-filtres').on('click', function(){
+		$('#filtre_preparateur').val('');
+		$('#filtre_envoyeur').val('');
+		$('#filtre_priorite').val('');
+		window.location = siteUrl + '/commandes';
+	});
+});
 </script>

@@ -14,6 +14,7 @@ class MY_Controller extends CI_Controller {
 		$data = array_merge($this->data, $data);
 		$data['content'] = $view;
 		$data['show_menu'] = $show_menu;
+		$data['show_footer'] = $show_menu; // Le footer suit la même logique que le menu
 		$this->load->view('layouts/default', $data);
 	}
 }

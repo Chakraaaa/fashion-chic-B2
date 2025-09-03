@@ -33,6 +33,16 @@ class Commande extends CI_Model {
 		if (!empty($filters['statut'])) {
 			$this->db->where('c.statut', $filters['statut']);
 		}
+		// Filtres supplémentaires
+		if (!empty($filters['priority_level'])) {
+			$this->db->where('c.priority_level', $filters['priority_level']);
+		}
+		if (!empty($filters['id_commande'])) {
+			$this->db->where('c.id_commande', $filters['id_commande']);
+		}
+		if (!empty($filters['id_commercial'])) {
+			$this->db->where('c.id_commercial', $filters['id_commercial']);
+		}
 		if (isset($filters['attribue']) && $filters['attribue'] === false) {
 			// Commandes non attribuées à un préparateur ou envoyeur
 			$this->db->where('(c.id_preparateur IS NULL OR c.id_envoyeur IS NULL)');

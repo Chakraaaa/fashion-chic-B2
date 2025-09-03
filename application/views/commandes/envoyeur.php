@@ -209,18 +209,14 @@
                             </form>
                         </td>
                         <td>
-                            <?php if ($commande->statut == 'Prête à envoyer'): ?>
-                                <form method="post" action="<?= site_url('commandes/demarrer_envoi/' . $commande->id_commande) ?>" style="display:inline-block">
-                                    <button type="submit" class="btn btn-sm btn-success">Démarrer</button>
-                                </form>
-                            <?php elseif ($commande->statut == 'Prête à livrer'): ?>
-                                <form method="post" action="<?= site_url('commandes/valider_envoi/' . $commande->id_commande) ?>" style="display:inline-block">
-                                    <button type="submit" class="btn btn-sm btn-primary">Terminer</button>
-                                </form>
-                            <?php endif; ?>
-                            <form method="post" action="<?= site_url('commandes/passer_en_erreur/' . $commande->id_commande) ?>" style="display:inline-block">
-                                <button type="submit" class="btn btn-sm btn-danger">Erreur</button>
-                            </form>
+                            							<?php if ($commande->statut == 'Prête à envoyer' || $commande->statut == 'Prête à livrer'): ?>
+								<button type="button" class="btn btn-sm btn-primary btn-view-contenu-commande" data-id="<?= $commande->id_commande ?>">Contenu</button>
+							<?php endif; ?>
+							<?php if ($commande->statut == 'Prête à envoyer'): ?>
+								<form method="post" action="<?= site_url('commandes/demarrer_envoi/' . $commande->id_commande) ?>" style="display:inline-block" onsubmit="return confirm('Êtes-vous sûr de vouloir valider l\'envoi ?');">
+									<button type="submit" class="btn btn-sm btn-success">Valider</button>
+								</form>
+							<?php endif; ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -229,3 +225,33 @@
         </table>
     </div>
 </div> 
+
+<div id="popup-contenu-commande-preparateur" style="display:none;"></div>
+
+<script>
+$(document).ready(function () {
+	$(document).on('click', '.btn-view-contenu-commande', function () {
+		const commandeId = $(this).data('id');
+		$.ajax({
+			url: siteUrl + '/commandes/load_contenu_commande_preparateur/' + commandeId,
+			method: 'GET',
+			success: function (data) {
+				$('#popup-contenu-commande-preparateur').remove();
+				$('body').append('<div id="popup-contenu-commande-preparateur"></div>');
+				$('#popup-contenu-commande-preparateur').html(data);
+				const popup = new bootstrap.Modal(document.getElementById('popupContenuCommandePreparateur'), {
+					backdrop: 'static',
+					keyboard: false
+				});
+				popup.show();
+				$('#popupContenuCommandePreparateur').on('hidden.bs.modal', function () {
+					$(this).closest('#popup-contenu-commande-preparateur').remove();
+				});
+			},
+			error: function () {
+				alert("Erreur lors du chargement du contenu de la commande.");
+			}
+		});
+	});
+});
+</script> 

@@ -165,14 +165,14 @@
 					$('#popup-add-client').remove();
 					$('body').append(data);
 					setTimeout(function() {
-						var modalEl = document.getElementById('modalAjouterClient');
+						var modalEl = document.getElementById('popupAddClient');
 						if (modalEl) {
 							const popup = new bootstrap.Modal(modalEl, {
 								backdrop: 'static',
 								keyboard: false
 							});
 							popup.show();
-							$('#modalAjouterClient').on('hidden.bs.modal', function () {
+							$('#popupAddClient').on('hidden.bs.modal', function () {
 								$(this).remove();
 							});
 						} else {

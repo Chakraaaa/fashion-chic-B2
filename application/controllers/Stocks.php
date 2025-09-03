@@ -28,11 +28,11 @@ class Stocks extends MY_Controller {
 			$data['produits'] = $produits;
 			$this->loadView('stocks/admin', $data);
 		} elseif ($role === 'preparateur') {
-			// Vue spécifique préparateur
-			$this->loadView('commandes/preparateur', $data, false);
+			// Rediriger vers le contrôleur Commandes
+			redirect('commandes/preparateur');
 		} elseif ($role === 'envoyeur') {
-			// Vue spécifique envoyeur
-			$this->loadView('commandes/envoyeur', $data, false);
+			// Rediriger vers le contrôleur Commandes
+			redirect('commandes/envoyeur');
 		} else {
 			show_error("Accès interdit à la gestion des stocks.", 403);
 		}

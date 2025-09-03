@@ -43,8 +43,8 @@ class Commandes extends MY_Controller {
 			}
 			$commandes = $this->Commande->getCommandes($filters);
 			$data['commandes'] = $commandes;
-			$data['preparateurs'] = $this->Utilisateur->getUsersByIdRole(6); // 6 = préparateur (à adapter selon id)
-			$data['envoyeurs'] = $this->Utilisateur->getUsersByIdRole(7); // 7 = envoyeur (à adapter selon id)
+			$data['preparateurs'] = $this->Utilisateur->getUsersByIdRole(4); 
+			$data['envoyeurs'] = $this->Utilisateur->getUsersByIdRole(5); 
 			$this->loadView('commandes/admin', $data);
 		}
 		elseif ($role === 'commercial') {
@@ -63,12 +63,12 @@ class Commandes extends MY_Controller {
 		$user = $this->session->userdata('user');
 		if (!$user) redirect('login');
 		$role = $this->Role->getRoleByUserIdRole($user->id_role);
-		if (strtolower($role) !== 'préparateur' && strtolower($role) !== 'preparateur') {
+		if (strtolower($role) !== 'preparateur') {
 			show_error("Accès interdit à la page préparateur.", 403);
 		}
 		$commandes = $this->Commande->getCommandes(['id_preparateur' => $user->id_utilisateur]);
 		$data = ['commandes' => $commandes];
-		$this->loadView('commandes/preparateur', $data);
+		$this->loadView('commandes/preparateur', $data, false);
 	}
 
 	// Affichage des commandes pour l'envoyeur
@@ -91,7 +91,7 @@ class Commandes extends MY_Controller {
 		$user = $this->session->userdata('user');
 		$role = $this->Role->getRoleByUserIdRole($user->id_role);
 		$commande = $this->Commande->getCommandes(['id_commande' => $id_commande]);
-		if (strtolower($role) !== 'préparateur' && strtolower($role) !== 'preparateur') {
+		if (strtolower($role) !== 'preparateur') {
 			show_error("Accès interdit.", 403);
 		}
 		if (empty($commande) || $commande[0]->id_preparateur != $user->id_utilisateur) {
@@ -105,7 +105,7 @@ class Commandes extends MY_Controller {
 		$user = $this->session->userdata('user');
 		$role = $this->Role->getRoleByUserIdRole($user->id_role);
 		$commande = $this->Commande->getCommandes(['id_commande' => $id_commande]);
-		if (strtolower($role) !== 'préparateur' && strtolower($role) !== 'preparateur') {
+		if (strtolower($role) !== 'preparateur') {
 			show_error("Accès interdit.", 403);
 		}
 		if (empty($commande) || $commande[0]->id_preparateur != $user->id_utilisateur) {
@@ -119,7 +119,7 @@ class Commandes extends MY_Controller {
 		$user = $this->session->userdata('user');
 		$role = $this->Role->getRoleByUserIdRole($user->id_role);
 		$commande = $this->Commande->getCommandes(['id_commande' => $id_commande]);
-		$isPrep = (strtolower($role) === 'préparateur' || strtolower($role) === 'preparateur') && !empty($commande) && $commande[0]->id_preparateur == $user->id_utilisateur;
+		$isPrep = (strtolower($role) === 'preparateur') && !empty($commande) && $commande[0]->id_preparateur == $user->id_utilisateur;
 		$isEnv = (strtolower($role) === 'envoyeur') && !empty($commande) && $commande[0]->id_envoyeur == $user->id_utilisateur;
 		if (!$isPrep && !$isEnv) {
 			show_error("Vous ne pouvez pas agir sur cette commande.", 403);
@@ -132,7 +132,7 @@ class Commandes extends MY_Controller {
 		$user = $this->session->userdata('user');
 		$role = $this->Role->getRoleByUserIdRole($user->id_role);
 		$commande = $this->Commande->getCommandes(['id_commande' => $id_commande]);
-		if (strtolower($role) !== 'préparateur' && strtolower($role) !== 'preparateur') {
+		if (strtolower($role) !== 'preparateur') {
 			show_error("Accès interdit.", 403);
 		}
 		if (empty($commande) || $commande[0]->id_preparateur != $user->id_utilisateur) {
@@ -376,6 +376,44 @@ class Commandes extends MY_Controller {
 			'lots_commande' => $lots_commande
 		];
 		$this->load->view('commandes/popup_contenu_commande', $data);
+	}
+
+	// Nouvelle version pour préparateur: liste des produits agrégés par commande avec cases à cocher
+	public function load_contenu_commande_preparateur($id_commande)
+	{
+		$this->load->model('Lot');
+		// Récupère les lots de la commande (avec quantités de lots)
+		$lots_commande = $this->Lot->getLotsByCommande($id_commande);
+
+		// Agrège les produits: pour chaque lot, multiplie la quantité du produit dans le lot par la quantité de ce lot dans la commande
+		$produits_agreges = [];
+		foreach ($lots_commande as $lot) {
+			$contenu_lot = $this->Lot->getContenuLot($lot->id_lot);
+			$quantite_lot_dans_commande = (int) $lot->quantite;
+			foreach ($contenu_lot as $p) {
+				$key = $p->reference;
+				$quantite_calculee = ((int) $p->quantite) * $quantite_lot_dans_commande;
+				if (!isset($produits_agreges[$key])) {
+					$produits_agreges[$key] = (object) [
+						'reference' => $p->reference,
+						'nom' => $p->nom,
+						'categorie' => $p->categorie,
+						'genre' => $p->genre,
+						'taille' => $p->taille,
+						'couleur' => $p->couleur,
+						'marque' => $p->marque,
+						'quantite' => 0
+					];
+				}
+				$produits_agreges[$key]->quantite += $quantite_calculee;
+			}
+		}
+
+		$data = [
+			'produits_commande' => array_values($produits_agreges)
+		];
+
+		$this->load->view('commandes/popup_contenu_commande_preparateur', $data);
 	}
 
 }

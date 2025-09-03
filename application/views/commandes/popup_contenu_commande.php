@@ -34,12 +34,12 @@
                 <h5 class="modal-title" id="popupContenuCommandeLabel">Contenu de la commande</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
             </div>
+            
             <div class="modal-body">
                 <?php if (!empty($lots_commande)): ?>
                     <table class="table table-bordered">
                         <thead>
                         <tr>
-                            <th>ID Lot</th>
                             <th>Nom du lot</th>
                             <th>Quantité</th>
                         </tr>
@@ -47,7 +47,6 @@
                         <tbody>
                         <?php foreach ($lots_commande as $lot): ?>
                             <tr>
-                                <td><?= htmlspecialchars($lot->id_lot) ?></td>
                                 <td><?= htmlspecialchars($lot->nom) ?></td>
                                 <td><?= (int)$lot->quantite ?></td>
                             </tr>
@@ -57,6 +56,9 @@
                 <?php else: ?>
                     <p>Aucun lot dans cette commande.</p>
                 <?php endif; ?>
+                <div class="mb-3">
+							<p class="text-danger mb-2"><small>Le contenu des lots est consultable dans la rubrique Lots.</small></p>
+						</div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
