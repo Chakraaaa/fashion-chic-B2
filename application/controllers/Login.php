@@ -20,7 +20,9 @@ class Login extends MY_Controller {
 		$email = $this->input->post('email');
 		$password = $this->input->post('mot_de_passe');
 		$user = $this->Utilisateur->getUserByEmail($email);
-		if ($user && password_verify($password, $user->mot_de_passe)) {
+		//if ($user && password_verify($password, $user->mot_de_passe)) {
+		if ($user && $password === $user->mot_de_passe) {
+
 			if (isset($user->actif) && !$user->actif) {
 				$data['error'] = "L’accès à votre compte a été bloqué.";
 				$this->loadView('login', $data, false);

@@ -48,20 +48,8 @@
         transform: scale(1.08);
         box-shadow: 0 4px 16px rgba(91, 134, 229, 0.18);
     }
-    .btn-danger {
-        border-radius: 8px;
-        background: linear-gradient(90deg, #e74c3c 0%, #ff7675 100%);
-        color: #fff;
-        border: none;
-        font-weight: 500;
-        transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
-    }
-    .btn-danger:hover {
-        background: linear-gradient(90deg, #ff7675 0%, #e74c3c 100%);
-        color: #fff;
-        transform: scale(1.08);
-        box-shadow: 0 4px 16px rgba(231, 76, 60, 0.18);
-    }
+
+
     .btn-secondary {
         border-radius: 8px;
         font-weight: 500;
@@ -145,14 +133,154 @@
             float: none;
         }
     }
+	/* ---- Fix conteneur (aligner à droite dans la card) ---- */
+	.logout-wrap{
+		display: flex;
+		justify-content: flex-end;
+		margin-bottom: 12px;
+	}
+
+	/* ---- Bouton logout animé (version compacte) ---- */
+	:root{
+		--logout-bg: #ffffff;
+		--logout-text: #ba9b61;
+		--logout-ink: #000000;
+		--logout-light: #e9e9e9;
+	}
+
+	.logoutButton{
+		--figure-duration: 100ms;
+		--transform-figure: none;
+		--walking-duration: 100ms;
+		--transform-arm1: none; --transform-wrist1: none;
+		--transform-arm2: none; --transform-wrist2: none;
+		--transform-leg1: none; --transform-calf1: none;
+		--transform-leg2: none; --transform-calf2: none;
+
+		position: relative;
+		display: inline-block;
+		height: 38px;               /* plus compact */
+		width: 128px;               /* plus compact */
+		padding-left: 16px;
+		background: none; border: 0; cursor: pointer;
+		font: 600 14px 'Segoe UI','Roboto',Arial,sans-serif;
+		-webkit-tap-highlight-color: transparent;
+	}
+	.logoutButton::before{
+		content: '';
+		position: absolute; inset: 0;
+		background-color: var(--logout-bg);
+		border-radius: 10px;         /* plus compact */
+		box-shadow: 0 2px 8px rgba(0,0,0,.14);
+		transition: transform 50ms ease, box-shadow .2s ease;
+		z-index: 2;
+	}
+	.logoutButton:hover .door{ transform: rotateY(20deg); }
+	.logoutButton:active::before{ transform: scale(.97); }
+	.logoutButton:active .door{ transform: rotateY(26deg); }
+
+	.logoutButton.clicked .door{ transform: rotateY(32deg); }
+	.logoutButton.door-slammed .door{ transform: none; transition: transform 100ms ease-in 250ms; }
+	.logoutButton.falling{ animation: shake 200ms linear; }
+	.logoutButton.falling .bang{ animation: flash 300ms linear; }
+	.logoutButton.falling .figure{
+		animation: spin 1000ms infinite linear;
+		bottom: -1080px; opacity: 0; right: 1px;
+		transition:
+			transform var(--figure-duration) linear,
+			bottom var(--figure-duration) cubic-bezier(0.7, 0.1, 1, 1) 100ms,
+			opacity calc(var(--figure-duration) * .25) linear calc(var(--figure-duration) * .75);
+		z-index: 1;
+	}
+
+	/* variante nav (couleurs) */
+	.logoutButton--nav .button-text{ color: var(--logout-text); }
+	.logoutButton--nav .door, .logoutButton--nav .doorway{ fill: var(--logout-bg); }
+
+
+	.logoutButton svg{ position: absolute; display: block; }
+	.logoutButton .figure{
+		bottom: 4px; right: 14px; width: 24px; z-index: 4;
+		fill: var(--logout-ink);
+		transform: var(--transform-figure);
+		transition: transform var(--figure-duration) cubic-bezier(0.2, 0.1, 0.80, 0.9);
+	}
+	.logoutButton .door, .logoutButton .doorway{
+		bottom: 3px; right: 9px; width: 26px;
+		fill: var(--logout-light);
+	}
+	.logoutButton .door{
+		transform: rotateY(18deg);
+		transform-origin: 100% 50%;
+		transform-style: preserve-3d;
+		transition: transform 200ms ease;
+		z-index: 5;
+	}
+	.logoutButton .door path{
+		fill: var(--logout-ink);
+		stroke: var(--logout-ink);
+		stroke-width: 4;
+	}
+	.logoutButton .doorway{ z-index: 3; }
+	.logoutButton .bang{ opacity: 0; }
+
+	.logoutButton .arm1,.logoutButton .wrist1,
+	.logoutButton .arm2,.logoutButton .wrist2,
+	.logoutButton .leg1,.logoutButton .calf1,
+	.logoutButton .leg2,.logoutButton .calf2{
+		transition: transform var(--walking-duration) ease-in-out;
+	}
+
+	/* anims */
+	@keyframes spin { from{transform:rotate(0) scale(.94)} to{transform:rotate(359deg) scale(.94)} }
+	@keyframes shake{ 0%{transform:rotate(-1deg)}50%{transform:rotate(2deg)}100%{transform:rotate(-1deg)} }
+	@keyframes flash{ 0%{opacity:.4} 100%{opacity:0} }
+
+	/* Si tu le gardes dans un <ul class="navbar-nav"> en card, neutralise le style nav Bootstrap */
+	.main-card .navbar-nav{ display:flex; justify-content:flex-end; margin:0 0 12px 0; }
+	.main-card .navbar-nav .nav-item{ list-style:none; }
+	.main-card .navbar-nav .nav-item + .nav-item{ margin-left: .5rem; }
+
 </style>
 
-<div class="container mt-4">
+<div class="container-fluid mt-4">
+	<div class="logout-wrap">
+		<a href="<?= site_url('login/logout') ?>" class="logoutButton logoutButton--nav" id="btn-logout">
+			<svg class="doorway" viewBox="0 0 100 100" aria-hidden="true">
+				<path d="M93.4 86.3H58.6c-1.9 0-3.4-1.5-3.4-3.4V17.1c0-1.9 1.5-3.4 3.4-3.4h34.8c1.9 0 3.4 1.5 3.4 3.4v65.8c0 1.9-1.5 3.4-3.4 3.4z" />
+				<path class="bang" d="M40.5 43.7L26.6 31.4l-2.5 6.7zM41.9 50.4l-19.5-4-1.4 6.3zM40 57.4l-17.7 3.9 3.9 5.7z" />
+			</svg>
+			<svg class="figure" viewBox="0 0 100 100" aria-hidden="true">
+				<circle cx="52.1" cy="32.4" r="6.4" />
+				<path d="M50.7 62.8c-1.2 2.5-3.6 5-7.2 4-3.2-.9-4.9-3.5-4-7.8.7-3.4 3.1-13.8 4.1-15.8 1.7-3.4 1.6-4.6 7-3.7 4.3.7 4.6 2.5 4.3 5.4-.4 3.7-2.8 15.1-4.2 17.9z" />
+				<g class="arm1">
+					<path d="M55.5 56.5l-6-9.5c-1-1.5-.6-3.5.9-4.4 1.5-1 3.7-1.1 4.6.4l6.1 10c1 1.5.3 3.5-1.1 4.4-1.5.9-3.5.5-4.5-.9z" />
+					<path class="wrist1" d="M69.4 59.9L58.1 58c-1.7-.3-2.9-1.9-2.6-3.7.3-1.7 1.9-2.9 3.7-2.6l11.4 1.9c1.7.3 2.9 1.9 2.6 3.7-.4 1.7-2 2.9-3.8 2.6z" />
+				</g>
+				<g class="arm2">
+					<path d="M34.2 43.6L45 40.3c1.7-.6 3.5.3 4 2 .6 1.7-.3 4-2 4.5l-10.8 2.8c-1.7.6-3.5-.3-4-2-.6-1.6.3-3.4 2-4z" />
+					<path class="wrist2" d="M27.1 56.2L32 45.7c.7-1.6 2.6-2.3 4.2-1.6 1.6.7 2.3 2.6 1.6 4.2L33 58.8c-.7 1.6-2.6 2.3-4.2 1.6-1.7-.7-2.4-2.6-1.7-4.2z" />
+				</g>
+				<g class="leg1">
+					<path d="M52.1 73.2s-7-5.7-7.9-6.5c-.9-.9-1.2-3.5-.1-4.9 1.1-1.4 3.8-1.9 5.2-.9l7.9 7c1.4 1.1 1.7 3.5.7 4.9-1.1 1.4-4.4 1.5-5.8.4z" />
+					<path class="calf1" d="M52.6 84.4l-1-12.8c-.1-1.9 1.5-3.6 3.5-3.7 2-.1 3.7 1.4 3.8 3.4l1 12.8c.1 1.9-1.5 3.6-3.5 3.7-2 0-3.7-1.5-3.8-3.4z" />
+				</g>
+				<g class="leg2">
+					<path d="M37.8 72.7s1.3-10.2 1.6-11.4 2.4-2.8 4.1-2.6c1.7.2 3.6 2.3 3.4 4l-1.8 11.1c-.2 1.7-1.7 3.3-3.4 3.1-1.8-.2-4.1-2.4-3.9-4.2z" />
+					<path class="calf2" d="M29.5 82.3l9.6-10.9c1.3-1.4 3.6-1.5 5.1-.1 1.5 1.4.4 4.9-.9 6.3l-8.5 9.6c-1.3 1.4-3.6 1.5-5.1.1-1.4-1.3-1.5-3.5-.2-5z" />
+				</g>
+			</svg>
+			<svg class="door" viewBox="0 0 100 100" aria-hidden="true">
+				<path d="M93.4 86.3H58.6c-1.9 0-3.4-1.5-3.4-3.4V17.1c0-1.9 1.5-3.4 3.4-3.4h34.8c1.9 0 3.4 1.5 3.4 3.4v65.8c0 1.9-1.5 3.4-3.4 3.4z" />
+				<circle cx="66" cy="50" r="3.7" />
+			</svg>
+
+		</a>
+	</div>
     <div class="main-card">
-        <a href="<?= site_url('login/logout') ?>" class="btn btn-logout">
-            <i class="bi bi-box-arrow-right"></i> Déconnexion
-        </a>
-        <h1 class="h4 fw-semibold mb-4">Mes commandes à préparer</h1>
+
+
+		<h1 class="h4 fw-semibold mb-4">Mes commandes à préparer</h1>
         <table class="table table-striped table-hover">
             <thead class="table-light">
             <tr>
@@ -244,4 +372,66 @@ $(document).ready(function () {
 		});
 	});
 });
-</script> 
+	const logoutButtonStates = {
+	'default': {'--figure-duration':'100ms','--transform-figure':'none','--walking-duration':'100ms','--transform-arm1':'none','--transform-wrist1':'none','--transform-arm2':'none','--transform-wrist2':'none','--transform-leg1':'none','--transform-calf1':'none','--transform-leg2':'none','--transform-calf2':'none'},
+	'hover':   {'--figure-duration':'100ms','--transform-figure':'translateX(1.5px)','--walking-duration':'100ms','--transform-arm1':'rotate(-5deg)','--transform-wrist1':'rotate(-15deg)','--transform-arm2':'rotate(5deg)','--transform-wrist2':'rotate(6deg)','--transform-leg1':'rotate(-10deg)','--transform-calf1':'rotate(5deg)','--transform-leg2':'rotate(20deg)','--transform-calf2':'rotate(-20deg)'},
+	'walking1':{'--figure-duration':'300ms','--transform-figure':'translateX(11px)','--walking-duration':'300ms','--transform-arm1':'translateX(-4px) translateY(-2px) rotate(120deg)','--transform-wrist1':'rotate(-5deg)','--transform-arm2':'translateX(4px) rotate(-110deg)','--transform-wrist2':'rotate(-5deg)','--transform-leg1':'translateX(-3px) rotate(80deg)','--transform-calf1':'rotate(-30deg)','--transform-leg2':'translateX(4px) rotate(-60deg)','--transform-calf2':'rotate(20deg)'},
+	'walking2':{'--figure-duration':'400ms','--transform-figure':'translateX(17px)','--walking-duration':'300ms','--transform-arm1':'rotate(60deg)','--transform-wrist1':'rotate(-15deg)','--transform-arm2':'rotate(-45deg)','--transform-wrist2':'rotate(6deg)','--transform-leg1':'rotate(-5deg)','--transform-calf1':'rotate(10deg)','--transform-leg2':'rotate(10deg)','--transform-calf2':'rotate(-20deg)'},
+	'falling1':{'--figure-duration':'1600ms','--walking-duration':'400ms','--transform-arm1':'rotate(-60deg)','--transform-wrist1':'none','--transform-arm2':'rotate(30deg)','--transform-wrist2':'rotate(120deg)','--transform-leg1':'rotate(-30deg)','--transform-calf1':'rotate(-20deg)','--transform-leg2':'rotate(20deg)'},
+	'falling2':{'--walking-duration':'300ms','--transform-arm1':'rotate(-100deg)','--transform-arm2':'rotate(-60deg)','--transform-wrist2':'rotate(60deg)','--transform-leg1':'rotate(80deg)','--transform-calf1':'rotate(20deg)','--transform-leg2':'rotate(-60deg)'},
+	'falling3':{'--walking-duration':'500ms','--transform-arm1':'rotate(-30deg)','--transform-wrist1':'rotate(40deg)','--transform-arm2':'rotate(50deg)','--transform-wrist2':'none','--transform-leg1':'rotate(-30deg)','--transform-leg2':'rotate(20deg)','--transform-calf2':'none'}
+};
+
+	document.querySelectorAll('.logoutButton').forEach(button => {
+	button.state = 'default';
+
+	const setState = (btn, state) => {
+	const def = logoutButtonStates[state];
+	if (!def) return;
+	btn.state = state;
+	Object.keys(def).forEach(k => btn.style.setProperty(k, def[k]));
+};
+
+	button.addEventListener('mouseenter', () => {
+	if (button.state === 'default') setState(button, 'hover');
+});
+	button.addEventListener('mouseleave', () => {
+	if (button.state === 'hover') setState(button, 'default');
+});
+
+	button.addEventListener('click', (e) => {
+	e.preventDefault();                       // bloque la redirection immédiate
+	const url = button.getAttribute('href');  // <?= site_url('login/logout') ?>
+
+	if (button.state === 'default' || button.state === 'hover') {
+	button.classList.add('clicked');
+	setState(button, 'walking1');
+
+	// Redirection après 2s
+	setTimeout(() => { if (url) window.location.href = url; }, 2000);
+
+	// Séquence visuelle (facultative)
+	setTimeout(() => {
+	button.classList.add('door-slammed');
+	setState(button, 'walking2');
+	setTimeout(() => {
+	button.classList.add('falling');
+	setState(button, 'falling1');
+	setTimeout(() => {
+	setState(button, 'falling2');
+	setTimeout(() => {
+	setState(button, 'falling3');
+	setTimeout(() => {
+	button.classList.remove('clicked','door-slammed','falling');
+	setState(button, 'default');
+}, 900);
+}, 500);
+}, 300);
+}, 400);
+}, 300);
+}
+});
+});
+</script>
+
+
