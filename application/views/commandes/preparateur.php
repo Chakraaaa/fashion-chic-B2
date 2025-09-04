@@ -208,7 +208,7 @@
 							</form>
                             							<?php endif; ?>
                         </td>
-                    </tr>
+                    </tr>   
                 <?php endforeach; ?>
             <?php endif; ?>
             </tbody>
@@ -229,6 +229,8 @@ $(document).ready(function () {
 				$('#popup-contenu-commande-preparateur').remove();
 				$('body').append('<div id="popup-contenu-commande-preparateur"></div>');
 				$('#popup-contenu-commande-preparateur').html(data);
+				// Ajouter l'identifiant de commande sur la modale pour la persistance front
+				$('#popupContenuCommandePreparateur').attr('data-order-id', String(commandeId));
 				const popup = new bootstrap.Modal(document.getElementById('popupContenuCommandePreparateur'), {
 					backdrop: 'static',
 					keyboard: false

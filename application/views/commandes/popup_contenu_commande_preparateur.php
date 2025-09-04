@@ -44,14 +44,14 @@
 						</thead>
 						<tbody>
 						<?php foreach ($produits_commande as $prod): ?>
-							<tr>
+							<tr data-product-key="<?= htmlspecialchars($prod->reference . '|' . $prod->taille . '|' . $prod->couleur) ?>">
 								<td><?= htmlspecialchars($prod->reference) ?></td>
 								<td><?= htmlspecialchars($prod->nom) ?></td>
 								<td><?= htmlspecialchars($prod->taille) ?></td>
 								<td><?= htmlspecialchars($prod->couleur) ?></td>
 								<td class="fw-bold"><?= (int)$prod->quantite ?></td>
 								<td class="text-center">
-									<input class="form-check-input" type="checkbox" />
+									<input class="form-check-input fait-checkbox" type="checkbox" />
 								</td>
 							</tr>
 						<?php endforeach; ?>
@@ -67,3 +67,56 @@
 		</div>
 	</div>
 </div> 
+
+<script>
+(function() {
+	function getOrderId() {
+		var modal = document.getElementById('popupContenuCommandePreparateur');
+		return modal ? modal.getAttribute('data-order-id') : null;
+	}
+	function storageKey(orderId) {
+		return 'commande_fait_' + orderId;
+	}
+	function loadState(orderId) {
+		try {
+			var raw = localStorage.getItem(storageKey(orderId));
+			return raw ? JSON.parse(raw) : {};
+		} catch (e) {
+			return {};
+		}
+	}
+	function saveState(orderId, state) {
+		try {
+			localStorage.setItem(storageKey(orderId), JSON.stringify(state));
+		} catch (e) {}
+	}
+	function applyState(state) {
+		var rows = document.querySelectorAll('#popupContenuCommandePreparateur tbody tr');
+		rows.forEach(function(row) {
+			var key = row.getAttribute('data-product-key');
+			var checkbox = row.querySelector('.fait-checkbox');
+			if (!checkbox) return;
+			checkbox.checked = Boolean(state[key]);
+		});
+	}
+	function bindHandlers(orderId, state) {
+		var rows = document.querySelectorAll('#popupContenuCommandePreparateur tbody tr');
+		rows.forEach(function(row) {
+			var key = row.getAttribute('data-product-key');
+			var checkbox = row.querySelector('.fait-checkbox');
+			if (!checkbox) return;
+			checkbox.addEventListener('change', function() {
+				state[key] = checkbox.checked;
+				saveState(orderId, state);
+			});
+		});
+	}
+	document.addEventListener('DOMContentLoaded', function() {
+		var orderId = getOrderId();
+		if (!orderId) return;
+		var state = loadState(orderId);
+		applyState(state);
+		bindHandlers(orderId, state);
+	});
+})();
+</script> 

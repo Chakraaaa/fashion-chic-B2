@@ -203,10 +203,13 @@
                             </form>
                         </td>
                         <td>
-                            <form method="post" action="<?= site_url('commandes/modifier_lien_suivi/' . $commande->id_commande) ?>" class="d-flex align-items-center gap-2">
-                                <input type="text" name="lien_suivi" class="form-control form-control-sm" value="<?= htmlspecialchars($commande->lien_suivi) ?>" placeholder="Lien de suivi...">
-                                <button type="submit" class="btn btn-sm btn-outline-primary">💾</button>
-                            </form>
+                            <?php if ($commande->statut === 'Prête à envoyer'): ?>
+                                <span class="text-muted">Le lien sera généré à la validation.</span>
+                            <?php elseif (!empty($commande->lien_suivi)): ?>
+                                <a href="<?= htmlspecialchars($commande->lien_suivi) ?>" target="_blank" rel="noopener">Voir le suivi</a>
+                            <?php else: ?>
+                                <span class="text-muted"></span>
+                            <?php endif; ?>
                         </td>
                         <td>
                             							<?php if ($commande->statut == 'Prête à envoyer' || $commande->statut == 'Prête à livrer'): ?>
@@ -239,6 +242,8 @@ $(document).ready(function () {
 				$('#popup-contenu-commande-preparateur').remove();
 				$('body').append('<div id="popup-contenu-commande-preparateur"></div>');
 				$('#popup-contenu-commande-preparateur').html(data);
+				// Ajouter l'identifiant de commande sur la modale pour la persistance front
+				$('#popupContenuCommandePreparateur').attr('data-order-id', String(commandeId));
 				const popup = new bootstrap.Modal(document.getElementById('popupContenuCommandePreparateur'), {
 					backdrop: 'static',
 					keyboard: false

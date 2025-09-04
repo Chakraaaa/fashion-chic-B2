@@ -154,6 +154,10 @@ class Commandes extends MY_Controller {
 		if (empty($commande) || $commande[0]->id_envoyeur != $user->id_utilisateur) {
 			show_error("Vous ne pouvez pas agir sur cette commande.", 403);
 		}
+		// Générer un lien de suivi fictif et unique (ex: www.ups.com/track/XXXXXXXXXXXX)
+		$uniquePart = substr(strtoupper(md5(uniqid((string)$id_commande, true))), 0, 12);
+		$lienFictif = 'https://www.ups.com/track/' . $uniquePart;
+		$this->Commande->setLienSuivi($id_commande, $lienFictif);
 		$this->Commande->setStatut($id_commande, 'Prête à livrer');
 		redirect('commandes/envoyeur');
 	}
