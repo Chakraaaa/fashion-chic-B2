@@ -141,6 +141,10 @@ class Commande extends CI_Model {
 				'quantite' => $lot['quantite']
 			]);
 		}
+
+		// Recalculer le coût total à partir des lots et produits
+		$this->recalcCoutTotal($id_commande);
+
 		$this->db->trans_complete();
 		return $id_commande;
 	}
@@ -164,7 +168,26 @@ class Commande extends CI_Model {
 				'quantite' => $lot['quantite']
 			]);
 		}
+
+		// Recalculer le coût total après mise à jour des lots
+		$this->recalcCoutTotal($id_commande);
 		$this->db->trans_complete();
+	}
+
+	// Recalcule et met à jour COMMANDE.cout_total à partir des lots et produits
+	public function recalcCoutTotal($id_commande)
+	{
+		// total = SUM( cl.quantite * contenu.quantite * produit.prix_vente )
+		$sql = "SELECT SUM(cl.quantite * ct.quantite * p.prix_vente) AS total
+				FROM COMMANDE_LOT cl
+				JOIN CONTENU_LOT ct ON ct.id_lot = cl.id_lot
+				JOIN PRODUIT p ON p.id_produit = ct.id_produit
+				WHERE cl.id_commande = ?";
+		$query = $this->db->query($sql, [$id_commande]);
+		$row = $query->row();
+		$total = $row && isset($row->total) ? (float)$row->total : 0.0;
+		$this->db->where('id_commande', $id_commande);
+		$this->db->update('COMMANDE', ['cout_total' => $total]);
 	}
 
 	// Récupère les lots associés à une commande
